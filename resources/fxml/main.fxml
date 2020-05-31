@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="433.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+    <stylesheets>
+        <URL value="@/css/forma.css" />
+    </stylesheets>
+   <center>
+      <TableView fx:id="tbProducts" prefHeight="354.0" prefWidth="500.0" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn fx:id="colName" prefWidth="116.0" text="name" />
+          <TableColumn fx:id="colManufacturer" prefWidth="152.0" text="category" />
+            <TableColumn fx:id="colCategory" prefWidth="105.0" text="manufacturer" />
+            <TableColumn fx:id="colPrice" prefWidth="201.0" text="price" />
+        </columns>
+         <opaqueInsets>
+            <Insets right="50.0" />
+         </opaqueInsets>
+         <BorderPane.margin>
+            <Insets right="100.0" />
+         </BorderPane.margin>
+      </TableView>
+   </center>
+   <top>
+      <VBox prefHeight="85.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <TabPane prefHeight="47.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab text="Products">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="79.0" prefWidth="600.0" />
+                  </content>
+                </Tab>
+                <Tab text="Untitled Tab 2">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  </content>
+                </Tab>
+              </tabs>
+            </TabPane>
+            <ToolBar prefHeight="72.0" prefWidth="600.0">
+               <items>
+                  <ButtonBar prefHeight="40.0" prefWidth="241.0">
+                     <buttons>
+                        <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#actAdd">
+                           <graphic>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/list-add.png" />
+                                 </image></ImageView>
+                           </graphic></Button>
+                        <Button fx:id="btnEdit" mnemonicParsing="false" onAction="#actEdit">
+                           <graphic>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/edit.png" />
+                                 </image></ImageView>
+                           </graphic></Button>
+                        <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#actDelete">
+                           <graphic>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/edit-delete.png" />
+                                 </image></ImageView>
+                           </graphic></Button>
+                     </buttons>
+                  </ButtonBar>
+               </items>
+            </ToolBar>
+         </children>
+      </VBox>
+   </top>
+</BorderPane>

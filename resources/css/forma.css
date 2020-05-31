@@ -1,0 +1,10 @@
+#btnAdd {
+     -fx-graphic: url("/images/list-add.png");
+ }
+ #btnEdit{
+    -fx-graphic: url("/images/edit.png");
+ }
+
+ btnDelete{
+    -fx-graphic: url("/images/edit-delete.png");
+ }
