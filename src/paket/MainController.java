@@ -26,12 +26,15 @@ public class MainController {
     public TableColumn colName;
     public TableColumn colManufacturer;
     public TableColumn colCategory;
+ //   public TableColumn colKolicina;
     public SkladisteDAO model;
     public TableView tbProducts;
     public TableColumn colPrice;
     public ChoiceBox spinnerSkladiste;
     public  ObservableList<Proizvod> obsProizvodi = FXCollections.observableArrayList();
+ //   public ObservableList<Proizvodi_skladista> obsKolicine = FXCollections.observableArrayList();
     private Skladiste sk;
+    private int br=0;
 
     public MainController(SkladisteDAO model){
         this.model = model;
@@ -44,27 +47,37 @@ public class MainController {
         colManufacturer.setCellValueFactory(new PropertyValueFactory<Proizvod,String>("proizvodjac"));
         colCategory.setCellValueFactory(new PropertyValueFactory<Proizvod,String>("kategorija"));
         colPrice.setCellValueFactory(new PropertyValueFactory<Proizvod,Integer>("cijena"));
+  //      colKolicina.setCellValueFactory(new PropertyValueFactory<Proizvodi_skladista,Integer>("kolicina"));
 
+
+        obsProizvodi.clear();
         ArrayList<Skladiste> skladista = model.getSkladista();
+        if(spinnerSkladiste.getItems().size() != 0)
         spinnerSkladiste.getItems().clear();
+        br++;
 
         for(int i=0 ; i<skladista.size() ; i++){
             spinnerSkladiste.getItems().add(skladista.get(i).getNaziv());
         }
 
         spinnerSkladiste.getSelectionModel().select(skladista.get(0).getNaziv());
+   //     obsKolicine = model.getProizvodiSkladistaObservable(skladista.get(0));
+
         sk = skladista.get(0);
 
-        ArrayList<Proizvod> proizvods = model.getProizvodiSkladista(skladista.get(0));
-        for(int j=0 ; j<proizvods.size() ; j++){
-            obsProizvodi.add(proizvods.get(j));
+        if(br == 1){
+            ArrayList<Proizvod> proizvods = model.getProizvodiSkladista(skladista.get(0));
+            for(int j=0 ; j<proizvods.size() ; j++){
+                obsProizvodi.add(proizvods.get(j));
+            }
         }
+
 
         tbProducts.setItems(obsProizvodi);
 
         spinnerSkladiste.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
             obsProizvodi.clear();
-            //System.out.println(newValue);
+         //   System.out.println(newValue);
             for(int i=0 ; i<skladista.size() ; i++){
                 if(newValue.equals(skladista.get(i).getNaziv())){
                     ArrayList<Proizvod> proizvodi = model.getProizvodiSkladista(skladista.get(i));
@@ -76,7 +89,8 @@ public class MainController {
                 }
 
             }
-            tbProducts.setItems(obsProizvodi);
+            //if(!(newValue.equals(oldValue)))
+            //tbProducts.setItems(obsProizvodi);
 
         });
 
@@ -116,7 +130,8 @@ public class MainController {
                 Proizvod product = editController.getProduct();
                 if (product != null) {
                     model.addProduct(product);
-                    int kolicina = editController.getKolicina();
+               //     int kolicina = editController.getKolicina();
+                    int kolicina = 10;
                     model.addProductWarehouse(product,sk,kolicina);
                     obsProizvodi.clear();
                     initialize();
@@ -152,8 +167,9 @@ public class MainController {
         editBookWindow.setOnHiding(Event -> {
             Proizvod p = editController.getProduct();
             if(p != null) {
-                model.updateCurrentProduct(p);
                 int kolicina = editController.getKolicina();
+           //     model.updateCurrentProductWarehouse(p,sk.getId(),kolicina);
+                model.updateCurrentProduct(p);
                 obsProizvodi.clear();
                 initialize();
             }

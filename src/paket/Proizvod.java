@@ -14,11 +14,11 @@ public class Proizvod {
         this.cijena = cijena;
     }
 
-    public Proizvod(int id, String naziv, String kategorija, String proizvodjac,int cijena) {
+    public Proizvod(int id, String naziv, String proizvodjac, String kategorija,int cijena) {
         this.id = id;
         this.naziv = new SimpleStringProperty(naziv);
-        this.kategorija = new SimpleStringProperty(kategorija);
-        this.proizvodjac = new SimpleStringProperty(proizvodjac);
+        this.kategorija = new SimpleStringProperty(proizvodjac);
+        this.proizvodjac = new SimpleStringProperty(kategorija);
         this.cijena = cijena;
     }
 
