@@ -11,11 +11,12 @@ import java.util.ArrayList;
 public class SkladisteDAO {
     private static SkladisteDAO instance;
     private static Connection connection;
-    private PreparedStatement getAdminsUpit,getProductsUpit,getWarehousesUpit,getManufacturersUpit,getCategoriesUpit,addProductUpit,odrediIdProizvoda,currentProductUpit,deleteProductUpit,updateCurrentProductUpit;
+    private PreparedStatement getAdminsUpit,getProductsUpit,getWarehousesUpit,getManufacturersUpit,getCategoriesUpit,addProductUpit,odrediIdProizvoda,currentProductUpit,deleteProductUpit,updateCurrentProductUpit,getProizvodiSkladistaUpit,addProductWarehouseUpit,deleteProductWarehouseUpit;
     private ArrayList<Proizvodjac> manufacturers = new ArrayList<>();
     private ArrayList<Kategorija> categories = new ArrayList<>();
     private ObservableList<Proizvod> products = FXCollections.observableArrayList();
     private SimpleObjectProperty<Proizvod> currentProduct = null;
+    private SimpleObjectProperty<Proizvod> currentProductWarehouse = null;
 
     public static SkladisteDAO getInstance(){
         if(instance == null) instance = new SkladisteDAO();
@@ -49,7 +50,10 @@ public class SkladisteDAO {
             currentProductUpit = connection.prepareStatement("SELECT * from proizvodi where id=?");
             deleteProductUpit = connection.prepareStatement("DELETE FROM proizvodi where id=?");
             updateCurrentProductUpit = connection.prepareStatement("UPDATE proizvodi SET naziv=?,proizvodjac=?,kategorija=?,cijena=? WHERE id=?");
-
+            getWarehousesUpit = connection.prepareStatement("SELECT * from skladista");
+            getProizvodiSkladistaUpit = connection.prepareStatement("SELECT * from proizvodi_skladista");
+            addProductWarehouseUpit = connection.prepareStatement("INSERT INTO proizvodi_skladista VALUES(?,?,?)");
+            deleteProductWarehouseUpit = connection.prepareStatement("DELETE FROM proizvodi_skladista where proizvod_id=?");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -80,6 +84,7 @@ public class SkladisteDAO {
             ArrayList<Kategorija> kategorije = getCategories();
 
             while(rs.next()){
+                int id = rs.getInt(1);
                 String naziv = rs.getString(2);
                 Integer proizvodjac = rs.getInt(3);
                 String manufa = "";
@@ -97,7 +102,7 @@ public class SkladisteDAO {
                     }
                 }
                 int cijena = rs.getInt(5);
-                Proizvod p = new Proizvod(naziv,manufa,kat,cijena);
+                Proizvod p = new Proizvod(id,naziv,manufa,kat,cijena);
                 products.add(p);
             }
         } catch (SQLException e) {
@@ -145,10 +150,26 @@ public class SkladisteDAO {
         if(rs.next()){
             id = rs.getInt(1);
         }
-        addProductUpit.setInt(1,id);
+        ArrayList<Proizvodjac> proizvodjaci = getManufacturers();
+        ArrayList<Kategorija> kategorije = getCategories();
+        int proizv=0;
+        for(int i=0 ; i<proizvodjaci.size() ; i++){
+            if(proizvodjaci.get(i).getNaziv().equals(proizvod.getProizvodjac())){
+                proizv = i+1;
+                break;
+            }
+        }
+        int kat = 0;
+            for(int i=0 ; i<kategorije.size() ; i++){
+                if(kategorije.get(i).getNaziv().equals(proizvod.getKategorija())){
+                    kat = i+1;
+                    break;
+                }
+            }
+            addProductUpit.setInt(1,id);
         addProductUpit.setString(2,proizvod.nazivProperty().get());
-        addProductUpit.setString(3,proizvod.proizvodjacProperty().get());
-        addProductUpit.setString(4,proizvod.kategorijaProperty().get());
+        addProductUpit.setInt(3,proizv);
+        addProductUpit.setInt(4,kat);
         addProductUpit.setInt(5,proizvod.getCijena());
 
         addProductUpit.executeUpdate();
@@ -157,6 +178,27 @@ public class SkladisteDAO {
     } catch (SQLException e) {
         e.printStackTrace();
     }
+    }
+
+    public void addProductWarehouse(Proizvod proizvod,Skladiste skladiste,int kolicina){
+        try {
+            int id = 0;
+            ObservableList<Proizvod> p = getProducts();
+            for(int i=0 ; i<p.size() ; i++){
+                if(p.get(i).getNaziv().equals(proizvod.getNaziv())){
+                    id = p.get(i).getId();
+                }
+            }
+            addProductWarehouseUpit.setInt(1,id);
+            addProductWarehouseUpit.setInt(2,skladiste.getId());
+            addProductWarehouseUpit.setInt(3,kolicina);
+
+            addProductWarehouseUpit.executeUpdate();
+            products.add(proizvod);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public Proizvod getCurrentProduct() {
@@ -178,8 +220,8 @@ public class SkladisteDAO {
     public void deleteProduct(){
         try {
             if(currentProduct != null) {
-                currentProductUpit.setInt(1, currentProduct.get().getId());
-                currentProductUpit.executeUpdate();
+                deleteProductUpit.setInt(1, currentProduct.get().getId());
+                deleteProductUpit.executeUpdate();
                 products.remove(currentProduct.get());
                 currentProduct = null;
             }
@@ -200,6 +242,76 @@ public class SkladisteDAO {
 
             products.set(products.indexOf(currentProduct.get()), proizvod);
             currentProduct.set(proizvod);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ArrayList<Skladiste> getSkladista(){
+        ArrayList<Skladiste> skladista = new ArrayList<>();
+        try {
+            ResultSet rs = getWarehousesUpit.executeQuery();
+            while(rs.next()){
+                int id = rs.getInt(1);
+                String naziv = rs.getString(2);
+                String naziv_lokacije = rs.getString(3);
+                Skladiste sk = new Skladiste(id,naziv,naziv_lokacije);
+                skladista.add(sk);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return skladista;
+    }
+
+    public ArrayList<Proizvod> getProizvodiSkladista(Skladiste skl){
+        ArrayList<Proizvod> p_skladista = new ArrayList<>();
+        try {
+            ResultSet rs = getProizvodiSkladistaUpit.executeQuery();
+            ObservableList<Proizvod> proizvodi = getProducts();
+            ArrayList<Skladiste> skladista = getSkladista();
+
+            while(rs.next()){
+                int proizvod = rs.getInt(1);
+                int skladiste = rs.getInt(2);
+
+                Proizvod p = null;
+                for(int i=0 ; i<proizvodi.size() ; i++) {
+               //     System.out.println(proizvodi.get(i).getNaziv() + " " + proizvod);
+                    if (proizvodi.get(i).getId() == proizvod) {
+                        if(skl.getId() == skladiste){
+                            p = proizvodi.get(i);
+                        }
+                    }
+                }
+                if(p != null)
+                p_skladista.add(p);
+
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return p_skladista;
+    }
+
+    public void deleteFromWarehouse(Proizvod proizvod){
+        try {
+            int id = 0;
+            ObservableList<Proizvod> p = getProducts();
+            for(int i=0 ; i<p.size() ; i++){
+                if(p.get(i).getNaziv().equals(proizvod.getNaziv())){
+                    id = p.get(i).getId();
+                }
+            }
+                deleteProductWarehouseUpit.setInt(1, id);
+                deleteProductWarehouseUpit.executeUpdate();
+                products.remove(currentProduct.get());
+                currentProduct = null;
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

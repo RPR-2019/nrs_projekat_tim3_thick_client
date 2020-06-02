@@ -14,8 +14,8 @@
       <TableView fx:id="tbProducts" prefHeight="354.0" prefWidth="500.0" BorderPane.alignment="CENTER">
         <columns>
           <TableColumn fx:id="colName" prefWidth="116.0" text="name" />
-          <TableColumn fx:id="colManufacturer" prefWidth="152.0" text="category" />
-            <TableColumn fx:id="colCategory" prefWidth="105.0" text="manufacturer" />
+          <TableColumn fx:id="colManufacturer" prefWidth="152.0" text="manufacturer" />
+            <TableColumn fx:id="colCategory" prefWidth="105.0" text="category" />
             <TableColumn fx:id="colPrice" prefWidth="201.0" text="price" />
         </columns>
          <opaqueInsets>
@@ -70,6 +70,11 @@
                            </graphic></Button>
                      </buttons>
                   </ButtonBar>
+                  <ChoiceBox fx:id="spinnerSkladiste" prefWidth="150.0">
+                      <BorderPane.margin>
+                          <Insets left="130.0" />
+                      </BorderPane.margin>
+                  </ChoiceBox>
                </items>
             </ToolBar>
          </children>

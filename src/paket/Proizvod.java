@@ -7,10 +7,10 @@ public class Proizvod {
     private SimpleStringProperty naziv,kategorija,proizvodjac;
     private int cijena;
 
-    public Proizvod(String naziv, String kategorija, String proizvodjac,int cijena) {
+    public Proizvod(String naziv, String proizvodjac, String kategorija,int cijena) {
         this.naziv = new SimpleStringProperty(naziv);
-        this.kategorija = new SimpleStringProperty(kategorija);
         this.proizvodjac = new SimpleStringProperty(proizvodjac);
+        this.kategorija = new SimpleStringProperty(kategorija);
         this.cijena = cijena;
     }
 

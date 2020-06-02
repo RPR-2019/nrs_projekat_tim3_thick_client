@@ -13,38 +13,29 @@ public class EditController {
     public TextField fldProizvodjac;
     public TextField fldKategorija;
     public TextField fldCijena;
+    public TextField fldKolicina;
     public Proizvod product = null;
     public Button btnCancel;
     public Button btnOk;
+    public int kolicina = 0;
 
     public EditController(Proizvod product){
         this.product = product;
     }
 
     public void initialize(){
-        fldNaziv.setText("");
-        fldKategorija.setText("");
-        fldCijena.setText("");
-        fldProizvodjac.setText("");
-    }
-
-    public void actOk(ActionEvent actionEvent) {
         if(product == null) {
-            product = new Proizvod();
+            fldNaziv.setText("");
+            fldKategorija.setText("");
+            fldCijena.setText("");
+            fldProizvodjac.setText("");
+            fldKolicina.setText("");
+        } else {
+            fldNaziv.setText(product.getNaziv());
+            fldProizvodjac.setText(product.getProizvodjac());
+            fldKategorija.setText(product.getKategorija());
+            fldCijena.setText(String.valueOf(product.getCijena()));
         }
-        product.setNaziv(fldNaziv.getText());
-        product.setKategorija(fldKategorija.getText());
-        product.setCijena(Integer.parseInt(fldCijena.getText()));
-        product.setProizvodjac(fldProizvodjac.getText());
-
-        Stage stage = (Stage) btnOk.getScene().getWindow();
-        stage.close();
-    }
-    @FXML
-    public void actCancel(ActionEvent actionEvent) {
-        Node n = (Node) actionEvent.getSource();
-        Stage stage = (Stage) n.getScene().getWindow();
-        stage.close();
     }
 
     public Proizvod getProduct() {
@@ -53,5 +44,26 @@ public class EditController {
 
     public void setProduct(Proizvod product) {
         this.product = product;
+    }
+
+    public void actOk(ActionEvent actionEvent) {
+            if(product == null){
+                product = new Proizvod(fldNaziv.getText(),fldProizvodjac.getText(),fldKategorija.getText(),Integer.parseInt(fldCijena.getText()));
+                kolicina = Integer.parseInt(fldKolicina.getText());
+
+            }
+            Stage stage = (Stage) btnOk.getScene().getWindow();
+            stage.close();
+
+    }
+
+    public void actCancel(ActionEvent actionEvent) {
+        Node n = (Node) actionEvent.getSource();
+        Stage stage = (Stage) n.getScene().getWindow();
+        stage.close();
+    }
+
+    public int getKolicina(){
+        return kolicina;
     }
 }
