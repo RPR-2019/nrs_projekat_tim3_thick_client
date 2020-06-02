@@ -41,7 +41,7 @@ public class SkladisteDAO {
         }
 
         try {
-            getAdminsUpit = connection.prepareStatement("SELECT * from korisnicki_racuni");
+            getAdminsUpit = connection.prepareStatement("SELECT * from korisnicki_racuni where pravo_pristupa=1");
             getProductsUpit = connection.prepareStatement("SELECT * from proizvodi");
             getManufacturersUpit = connection.prepareStatement("SELECT * from proizvodjaci");
             getCategoriesUpit = connection.prepareStatement("SELECT * from kategorije");
