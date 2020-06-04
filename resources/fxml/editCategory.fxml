@@ -13,16 +13,11 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
         <Label text="  Naziv" />
-        <Label text="  Proizvodjac" GridPane.rowIndex="1" />
-        <Label text="  Kategorija" GridPane.rowIndex="2" />
-        <Label text="  Cijena" GridPane.rowIndex="3" />
-        <ButtonBar prefHeight="33.0" prefWidth="163.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+        <Label text="  NadKategorija:" GridPane.rowIndex="1" />
+        <ButtonBar prefHeight="33.0" prefWidth="163.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
             <buttons>
                 <Button fx:id="btnOk" mnemonicParsing="false" onAction="#actOk" text="Ok" />
                 <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#actCancel" text="Cancel" />
@@ -36,26 +31,10 @@
                 <Insets right="30.0" />
             </GridPane.margin>
         </TextField>
-        <TextField fx:id="fldProizvodjac" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <TextField fx:id="fldNadKategorija" GridPane.columnIndex="1" GridPane.rowIndex="1">
             <GridPane.margin>
                 <Insets right="30.0" />
             </GridPane.margin>
         </TextField>
-        <TextField fx:id="fldKategorija" GridPane.columnIndex="1" GridPane.rowIndex="2">
-            <GridPane.margin>
-                <Insets right="30.0" />
-            </GridPane.margin>
-        </TextField>
-      <TextField fx:id="fldCijena" prefHeight="25.0" prefWidth="167.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
-        <GridPane.margin>
-            <Insets right="30.0" />
-        </GridPane.margin>
-      </TextField>
-      <Label text="  Kolicina" GridPane.rowIndex="4" />
-      <TextField fx:id="fldKolicina" GridPane.columnIndex="1" GridPane.rowIndex="4">
-          <GridPane.margin>
-              <Insets right="30.0" />
-          </GridPane.margin>
-      </TextField>
     </children>
 </GridPane>

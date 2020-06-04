@@ -11,12 +11,9 @@
         <URL value="@/css/forma.css" />
     </stylesheets>
     <center>
-        <TableView fx:id="tbProducts" prefHeight="347.0" prefWidth="513.0" BorderPane.alignment="CENTER">
+        <TableView fx:id="tbCategories" prefHeight="347.0" prefWidth="513.0" BorderPane.alignment="CENTER">
             <columns>
-                <TableColumn fx:id="colName" prefWidth="145.0" text="name" />
-                <TableColumn fx:id="colManufacturer" prefWidth="162.0" text="manufacturer" />
-                <TableColumn fx:id="colCategory" minWidth="0.0" prefWidth="144.0" text="category" />
-                <TableColumn fx:id="colPrice" prefWidth="148.0" text="price" />
+                <TableColumn fx:id="colName" prefWidth="599.0" text="name" />
             </columns>
             <opaqueInsets>
                 <Insets right="50.0" />
@@ -28,7 +25,7 @@
             <children>
                 <TabPane prefHeight="47.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
                     <tabs>
-                        <Tab text="Products">
+                        <Tab text="Categories">
                             <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="79.0" prefWidth="600.0" />
                             </content>
@@ -62,13 +59,6 @@
                                     </graphic></Button>
                             </buttons>
                         </ButtonBar>
-                        <ChoiceBox fx:id="spinnerSkladiste" prefWidth="150.0">
-                            <BorderPane.margin>
-                                <Insets left="130.0" />
-                            </BorderPane.margin>
-                        </ChoiceBox>
-                  <Button fx:id="btnCategories" mnemonicParsing="false" onAction="#actCategories" text="Categories" />
-                  <Button fx:id="btnIzvjestaj" mnemonicParsing="false" onAction="#actIzvjestaj" text="Izvjestaj" />
                     </items>
                 </ToolBar>
             </children>

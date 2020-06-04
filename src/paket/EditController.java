@@ -13,7 +13,7 @@ public class EditController {
     public TextField fldProizvodjac;
     public TextField fldKategorija;
     public TextField fldCijena;
-   // public TextField fldKolicina;
+    public TextField fldKolicina;
     public Proizvod product = null;
     public Button btnCancel;
     public Button btnOk;
@@ -29,13 +29,13 @@ public class EditController {
             fldKategorija.setText("");
             fldCijena.setText("");
             fldProizvodjac.setText("");
-       //     fldKolicina.setText("");
+            fldKolicina.setText("");
         } else {
             fldNaziv.setText(product.getNaziv());
             fldProizvodjac.setText(product.getProizvodjac());
             fldKategorija.setText(product.getKategorija());
             fldCijena.setText(String.valueOf(product.getCijena()));
-         //   fldKolicina.setText(String.valueOf(1));
+            fldKolicina.setText(String.valueOf(product.getKolicina()));
         }
     }
 
@@ -50,11 +50,11 @@ public class EditController {
     public void actOk(ActionEvent actionEvent) {
             if(product == null){
                 product = new Proizvod(fldNaziv.getText(),fldProizvodjac.getText(),fldKategorija.getText(),Integer.parseInt(fldCijena.getText()));
-             //   kolicina = Integer.parseInt(fldKolicina.getText());
+                kolicina = Integer.parseInt(fldKolicina.getText());
 
             }
         product = new Proizvod(fldNaziv.getText(),fldProizvodjac.getText(),fldKategorija.getText(),Integer.parseInt(fldCijena.getText()));
-      //  kolicina = Integer.parseInt(fldKolicina.getText());
+        kolicina = Integer.parseInt(fldKolicina.getText());
 
         Stage stage = (Stage) btnOk.getScene().getWindow();
         stage.close();

@@ -6,6 +6,7 @@ public class Proizvod {
     private int id;
     private SimpleStringProperty naziv,kategorija,proizvodjac;
     private int cijena;
+    private int kolicina;
 
     public Proizvod(String naziv, String proizvodjac, String kategorija,int cijena) {
         this.naziv = new SimpleStringProperty(naziv);
@@ -20,6 +21,23 @@ public class Proizvod {
         this.kategorija = new SimpleStringProperty(proizvodjac);
         this.proizvodjac = new SimpleStringProperty(kategorija);
         this.cijena = cijena;
+    }
+
+    public Proizvod(String naziv, String kategorija, String proizvodjac, int cijena, int kolicina) {
+        this.naziv = new SimpleStringProperty(naziv);
+        this.kategorija = new SimpleStringProperty(kategorija);
+        this.proizvodjac = new SimpleStringProperty(proizvodjac);
+        this.cijena = cijena;
+        this.kolicina = kolicina;
+    }
+
+    public Proizvod(int id, String naziv, String kategorija, String proizvodjac, int cijena, int kolicina) {
+        this.id = id;
+        this.naziv = new SimpleStringProperty(naziv);
+        this.kategorija = new SimpleStringProperty(kategorija);
+        this.proizvodjac = new SimpleStringProperty(proizvodjac);
+        this.cijena = cijena;
+        this.kolicina = kolicina;
     }
 
     public Proizvod() {
@@ -75,5 +93,13 @@ public class Proizvod {
 
     public void setCijena(int cijena) {
         this.cijena = cijena;
+    }
+
+    public int getKolicina() {
+        return kolicina;
+    }
+
+    public void setKolicina(int kolicina) {
+        this.kolicina = kolicina;
     }
 }

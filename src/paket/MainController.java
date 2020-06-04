@@ -1,11 +1,12 @@
 package paket;
 
-import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,10 +14,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import net.sf.jasperreports.engine.JRException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Optional;
 
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
@@ -26,13 +27,13 @@ public class MainController {
     public TableColumn colName;
     public TableColumn colManufacturer;
     public TableColumn colCategory;
- //   public TableColumn colKolicina;
+    public TableColumn colKolicina;
     public SkladisteDAO model;
     public TableView tbProducts;
     public TableColumn colPrice;
     public ChoiceBox spinnerSkladiste;
     public  ObservableList<Proizvod> obsProizvodi = FXCollections.observableArrayList();
- //   public ObservableList<Proizvodi_skladista> obsKolicine = FXCollections.observableArrayList();
+    public Tab tabCategories;
     private Skladiste sk;
     private int br=0;
 
@@ -47,13 +48,13 @@ public class MainController {
         colManufacturer.setCellValueFactory(new PropertyValueFactory<Proizvod,String>("proizvodjac"));
         colCategory.setCellValueFactory(new PropertyValueFactory<Proizvod,String>("kategorija"));
         colPrice.setCellValueFactory(new PropertyValueFactory<Proizvod,Integer>("cijena"));
-  //      colKolicina.setCellValueFactory(new PropertyValueFactory<Proizvodi_skladista,Integer>("kolicina"));
 
 
         obsProizvodi.clear();
         ArrayList<Skladiste> skladista = model.getSkladista();
         if(spinnerSkladiste.getItems().size() != 0)
         spinnerSkladiste.getItems().clear();
+
         br++;
 
         for(int i=0 ; i<skladista.size() ; i++){
@@ -61,7 +62,6 @@ public class MainController {
         }
 
         spinnerSkladiste.getSelectionModel().select(skladista.get(0).getNaziv());
-   //     obsKolicine = model.getProizvodiSkladistaObservable(skladista.get(0));
 
         sk = skladista.get(0);
 
@@ -74,6 +74,7 @@ public class MainController {
 
 
         tbProducts.setItems(obsProizvodi);
+    //    tbProducts.setItems(obsKolicine);
 
         spinnerSkladiste.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
             obsProizvodi.clear();
@@ -109,7 +110,6 @@ public class MainController {
             }
         });
 
-
     }
 
 
@@ -129,10 +129,9 @@ public class MainController {
             editProductWindow.setOnHiding( event -> {
                 Proizvod product = editController.getProduct();
                 if (product != null) {
-                    model.addProduct(product);
-               //     int kolicina = editController.getKolicina();
-                    int kolicina = 10;
-                    model.addProductWarehouse(product,sk,kolicina);
+                    int kolicina = product.getKolicina();
+                    model.addProduct(product,sk,kolicina);
+                  //  model.addProductWarehouse(product,sk,kolicina);
                     obsProizvodi.clear();
                     initialize();
                 //    tbProducts.setItems(model.getProducts());
@@ -191,6 +190,30 @@ public class MainController {
                 initialize();
                 tbProducts.getSelectionModel().selectLast();
             }
+        }
+    }
+
+    public void actCategories(ActionEvent actionEvent) {
+        Stage editProductWindow = new Stage();
+        Parent root = null;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/mainEdit.fxml"));
+            MainCategoryController editController = new MainCategoryController();
+            loader.setController(editController);
+            root = loader.load();
+            editProductWindow.setScene(new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
+            editProductWindow.setResizable(false);
+            editProductWindow.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void actIzvjestaj(ActionEvent actionEvent) {
+        try {
+            new Izvjestaj().showReport(model.getConnection());
+        } catch (JRException e1) {
+            e1.printStackTrace();
         }
     }
 }
