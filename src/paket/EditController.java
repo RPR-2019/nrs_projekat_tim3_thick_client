@@ -51,10 +51,12 @@ public class EditController {
             if(product == null){
                 product = new Proizvod(fldNaziv.getText(),fldProizvodjac.getText(),fldKategorija.getText(),Integer.parseInt(fldCijena.getText()));
                 kolicina = Integer.parseInt(fldKolicina.getText());
+                product.setKolicina(Integer.parseInt(fldKolicina.getText()));
 
             }
         product = new Proizvod(fldNaziv.getText(),fldProizvodjac.getText(),fldKategorija.getText(),Integer.parseInt(fldCijena.getText()));
         kolicina = Integer.parseInt(fldKolicina.getText());
+        product.setKolicina(Integer.parseInt(fldKolicina.getText()));
 
         Stage stage = (Stage) btnOk.getScene().getWindow();
         stage.close();

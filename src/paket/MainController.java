@@ -129,8 +129,9 @@ public class MainController {
             editProductWindow.setOnHiding( event -> {
                 Proizvod product = editController.getProduct();
                 if (product != null) {
-                    int kolicina = product.getKolicina();
-                    model.addProduct(product,sk,kolicina);
+                //    int kolicina = editController.getKolicina();
+                //    product.setKolicina(kolicina);
+                    model.addProduct(product,sk);
                   //  model.addProductWarehouse(product,sk,kolicina);
                     obsProizvodi.clear();
                     initialize();
@@ -166,7 +167,8 @@ public class MainController {
         editBookWindow.setOnHiding(Event -> {
             Proizvod p = editController.getProduct();
             if(p != null) {
-                int kolicina = editController.getKolicina();
+           //     int kolicina = editController.getKolicina();
+           //     p.setKolicina(kolicina);
            //     model.updateCurrentProductWarehouse(p,sk.getId(),kolicina);
                 model.updateCurrentProduct(p);
                 obsProizvodi.clear();
@@ -177,7 +179,7 @@ public class MainController {
 
     @FXML
     public void actDelete(ActionEvent actionEvent) {
-        if (model.getCurrentProduct() != null) {       // Samo ako se klikne na neku knjigu
+        if (model.getCurrentProduct() != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmation Dialog");
             alert.setHeaderText("");

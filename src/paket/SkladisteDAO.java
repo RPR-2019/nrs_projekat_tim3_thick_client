@@ -194,7 +194,7 @@ public class SkladisteDAO {
         }
     }
 
-    public void addProduct(Proizvod proizvod,Skladiste skladiste,int kolicina) {
+    public void addProduct(Proizvod proizvod,Skladiste skladiste) {
         try {
             ResultSet rs = odrediIdProizvoda.executeQuery();
             int id = 1;
@@ -227,7 +227,7 @@ public class SkladisteDAO {
 
             addProductWarehouseUpit.setInt(1, id);
             addProductWarehouseUpit.setInt(2, skladiste.getId());
-            addProductWarehouseUpit.setInt(3, kolicina);
+            addProductWarehouseUpit.setInt(3, proizvod.getKolicina());
 
             addProductWarehouseUpit.executeUpdate();
             products.add(proizvod);
