@@ -10,68 +10,191 @@
     <stylesheets>
         <URL value="@/css/forma.css" />
     </stylesheets>
-    <center>
-        <TableView fx:id="tbProducts" prefHeight="347.0" prefWidth="513.0" BorderPane.alignment="CENTER">
-            <columns>
-                <TableColumn fx:id="colName" prefWidth="145.0" text="name" />
-                <TableColumn fx:id="colManufacturer" prefWidth="162.0" text="manufacturer" />
-                <TableColumn fx:id="colCategory" minWidth="0.0" prefWidth="144.0" text="category" />
-                <TableColumn fx:id="colPrice" prefWidth="148.0" text="price" />
-            </columns>
-            <opaqueInsets>
-                <Insets right="50.0" />
-            </opaqueInsets>
-        </TableView>
-    </center>
-    <top>
-        <VBox prefHeight="85.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-            <children>
-                <TabPane prefHeight="47.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
-                    <tabs>
-                        <Tab text="Products">
-                            <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="79.0" prefWidth="600.0" />
-                            </content>
-                        </Tab>
-                    </tabs>
-                </TabPane>
-                <ToolBar prefHeight="72.0" prefWidth="600.0">
-                    <items>
-                        <ButtonBar prefHeight="40.0" prefWidth="241.0">
-                            <buttons>
-                                <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#actAdd">
-                                    <graphic>
-                                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                            <image>
+   <center>
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab text="Products">
+              <content>
+                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                     <top>
+                        <VBox prefHeight="57.0" prefWidth="665.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <ButtonBar prefHeight="57.0" prefWidth="451.0">
+                                 <buttons>
+                                    <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#actAdd">
+                                       <graphic>
+                                          <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
                                                 <Image url="@../images/list-add.png" />
-                                            </image></ImageView>
-                                    </graphic></Button>
-                                <Button fx:id="btnEdit" mnemonicParsing="false" onAction="#actEdit">
-                                    <graphic>
-                                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                            <image>
+                                             </image></ImageView>
+                                       </graphic></Button>
+                                    <Button fx:id="btnEdit" mnemonicParsing="false" onAction="#actEdit">
+                                       <graphic>
+                                          <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
                                                 <Image url="@../images/edit.png" />
-                                            </image></ImageView>
-                                    </graphic></Button>
-                                <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#actDelete">
-                                    <graphic>
-                                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                            <image>
+                                             </image>
+                                          </ImageView>
+                                       </graphic></Button>
+                                    <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#actDelete">
+                                       <graphic>
+                                          <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
                                                 <Image url="@../images/edit-delete.png" />
-                                            </image></ImageView>
-                                    </graphic></Button>
-                            </buttons>
-                        </ButtonBar>
-                        <ChoiceBox fx:id="spinnerSkladiste" prefWidth="150.0">
-                            <BorderPane.margin>
-                                <Insets left="130.0" />
-                            </BorderPane.margin>
-                        </ChoiceBox>
-                  <Button fx:id="btnCategories" mnemonicParsing="false" onAction="#actCategories" text="Categories" />
-                  <Button fx:id="btnIzvjestaj" mnemonicParsing="false" onAction="#actIzvjestaj" text="Izvjestaj" />
-                    </items>
-                </ToolBar>
-            </children>
-        </VBox>
-    </top>
+                                             </image>
+                                          </ImageView>
+                                       </graphic></Button>
+                                 </buttons>
+                                 <VBox.margin>
+                                    <Insets right="400.0" />
+                                 </VBox.margin>
+                              </ButtonBar>
+                              <ChoiceBox fx:id="spinnerSkladiste" prefWidth="150.0">
+                                 <VBox.margin>
+                                    <Insets left="300.0" top="-40.0" />
+                                 </VBox.margin>
+                              </ChoiceBox>
+                           </children>
+                        </VBox>
+                     </top>
+                     <center>
+                        <TableView fx:id="tbProducts" prefHeight="368.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+                          <columns>
+                              <TableColumn fx:id="colName" prefWidth="143.0" text="name" />
+                              <TableColumn fx:id="colManufacturer" prefWidth="152.0" text="manufacturer" />
+                              <TableColumn fx:id="colCategory" minWidth="0.0" prefWidth="156.0" text="category" />
+                              <TableColumn fx:id="colPrice" prefWidth="148.0" text="price" />
+                          </columns>
+                        </TableView>
+                     </center></BorderPane>
+              </content>
+          </Tab>
+          <Tab text="Categories">
+              <content>
+                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                      <top>
+                          <VBox prefHeight="57.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+                              <children>
+                                  <ButtonBar prefHeight="57.0" prefWidth="451.0">
+                                      <buttons>
+                                          <Button fx:id="btnAddCat" mnemonicParsing="false" onAction="#actAddCat">
+                                              <graphic>
+                                                  <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                      <image>
+                                                          <Image url="@../images/list-add.png" />
+                                                      </image></ImageView>
+                                              </graphic></Button>
+                                          <Button fx:id="btnEditCat" mnemonicParsing="false" onAction="#actEditCat">
+                                              <graphic>
+                                                  <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                      <image>
+                                                          <Image url="@../images/edit.png" />
+                                                      </image>
+                                                  </ImageView>
+                                              </graphic></Button>
+                                          <Button fx:id="btnDeleteCat" mnemonicParsing="false" onAction="#actDeleteCat">
+                                              <graphic>
+                                                  <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                      <image>
+                                                          <Image url="@../images/edit-delete.png" />
+                                                      </image>
+                                                  </ImageView>
+                                              </graphic></Button>
+                                      </buttons>
+                                      <VBox.margin>
+                                          <Insets right="400.0" />
+                                      </VBox.margin>
+                                  </ButtonBar>
+                              </children>
+                          </VBox>
+                      </top>
+                      <center>
+                          <TableView fx:id="tbCategories" prefHeight="368.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+                              <columns>
+                                  <TableColumn fx:id="colNameCat" prefWidth="599.0" text="name" />
+                              </columns>
+                          </TableView>
+                      </center>
+                  </BorderPane>
+              </content>
+          </Tab>
+            <Tab text="Employees">
+                <content>
+                    <BorderPane prefHeight="200.0" prefWidth="200.0">
+                        <top>
+                            <VBox prefHeight="57.0" prefWidth="665.0" BorderPane.alignment="CENTER">
+                                <children>
+                                    <ButtonBar prefHeight="57.0" prefWidth="451.0">
+                                        <buttons>
+                                            <Button fx:id="btnAddEmployee" mnemonicParsing="false" onAction="#actAddEmployee">
+                                                <graphic>
+                                                    <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                        <image>
+                                                            <Image url="@../images/list-add.png" />
+                                                        </image></ImageView>
+                                                </graphic></Button>
+                                            <Button fx:id="btnEditEmployee" mnemonicParsing="false" onAction="#actEditEmployee">
+                                                <graphic>
+                                                    <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                        <image>
+                                                            <Image url="@../images/edit.png" />
+                                                        </image>
+                                                    </ImageView>
+                                                </graphic></Button>
+                                            <Button fx:id="btnDeleteEmployee" mnemonicParsing="false" onAction="#actDeleteEmployee">
+                                                <graphic>
+                                                    <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                        <image>
+                                                            <Image url="@../images/edit-delete.png" />
+                                                        </image>
+                                                    </ImageView>
+                                                </graphic></Button>
+                                        </buttons>
+                                        <VBox.margin>
+                                            <Insets right="400.0" />
+                                        </VBox.margin>
+                                    </ButtonBar>
+                                </children>
+                            </VBox>
+                        </top>
+                        <center>
+                            <TableView fx:id="tbEmployees" prefHeight="368.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+                                <columns>
+                                    <TableColumn fx:id="colFullName" prefWidth="113.0" text="Name" />
+                                    <TableColumn fx:id="colPhone" minWidth="0.0" prefWidth="115.0" text="Phone" />
+                                    <TableColumn fx:id="colDatum_zapsl" prefWidth="113.0" text="Employee date" />
+                                    <TableColumn fx:id="colJMBG" prefWidth="120.0" text="JMBG" />
+                                    <TableColumn fx:id="colNazivLok" prefWidth="140.0" text="Location" />
+                                </columns>
+                            </TableView>
+                        </center>
+                    </BorderPane>
+                </content>
+            </Tab>
+            <Tab text="Izvjestaji">
+                <content>
+                    <BorderPane prefHeight="200.0" prefWidth="200.0">
+                     <top>
+                        <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <Button fx:id="btnIzvjestaj" mnemonicParsing="false" onAction="#actIzvjestaj" text="Products">
+                                 <VBox.margin>
+                                    <Insets left="30.0" top="50.0" />
+                                 </VBox.margin>
+                              </Button>
+                              <Button fx:id="btnIzvjestajEmployees" mnemonicParsing="false" onAction="#actIzvjestajEmployees" text="Employees">
+                                 <VBox.margin>
+                                    <Insets left="30.0" top="50.0" />
+                                 </VBox.margin>
+                              </Button>
+                           </children>
+                        </VBox>
+                     </top></BorderPane>
+                </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </center>
+
+    
 </BorderPane>

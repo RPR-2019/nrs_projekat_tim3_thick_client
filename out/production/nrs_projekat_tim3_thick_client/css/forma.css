@@ -8,3 +8,9 @@
  btnDelete{
     -fx-graphic: url("/images/edit-delete.png");
  }
+.poljeIspravno {
+        -fx-control-inner-background: greenyellow;
+ }
+.poljeNijeIspravno {
+         -fx-control-inner-background: lightpink;
+ }

@@ -40,8 +40,10 @@ public class LoginController {
 
         for (int i = 0; i < admini.size(); i++) {
             if (admini.get(i).getEmail().equals(email) && admini.get(i).getPassword().equals(pass)) {
-                fldUsername.setStyle("-fx-background-color: green; ");
-                fldPassword.setStyle("-fx-background-color: green; ");
+                fldUsername.getStyleClass().removeAll("poljeNijeIspravno");
+                fldUsername.getStyleClass().add("poljeIspravno");
+                fldPassword.getStyleClass().removeAll("poljeNijeIspravno");
+                fldPassword.getStyleClass().add("poljeIspravno");
                 SkladisteDAO skladisteDAO = SkladisteDAO.getInstance();
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
                 MainController mainController = new MainController(skladisteDAO);
@@ -59,8 +61,10 @@ public class LoginController {
 
             }
             else {
-                fldUsername.setStyle("-fx-background-color: red; ");
-                fldPassword.setStyle("-fx-background-color: red; ");
+                fldUsername.getStyleClass().removeAll("poljeIspravno");
+                fldUsername.getStyleClass().add("poljeNijeIspravno");
+                fldPassword.getStyleClass().removeAll("poljeIspravno");
+                fldPassword.getStyleClass().add("poljeNijeIspravno");
             }
         }
     }

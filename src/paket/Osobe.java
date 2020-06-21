@@ -3,14 +3,15 @@ package paket;
 import java.time.LocalDate;
 
 public class Osobe {
-    private int id,JMBG;
-    private String ime,prezime,telefon,naziv_lokacije;
+    private int id;
+    private Long JMBG;
+    private String ime,prezime,telefon,naziv_lokacije,email,password;
     private LocalDate datum_zaposljavanja;
 
     public Osobe() {
     }
 
-    public Osobe(int id, int JMBG, String ime, String prezime, String telefon, String naziv_lokacije, LocalDate datum_zaposljavanja) {
+    public Osobe(int id, String ime, String prezime, String telefon,LocalDate datum_zaposljavanja,long JMBG, String naziv_lokacije) {
         this.id = id;
         this.JMBG = JMBG;
         this.ime = ime;
@@ -18,6 +19,39 @@ public class Osobe {
         this.telefon = telefon;
         this.naziv_lokacije = naziv_lokacije;
         this.datum_zaposljavanja = datum_zaposljavanja;
+    }
+
+    public Osobe(String ime, String prezime, String telefon,LocalDate datum_zaposljavanja,long JMBG, String naziv_lokacije) {
+        this.id = id;
+        this.JMBG = JMBG;
+        this.ime = ime;
+        this.prezime = prezime;
+        this.telefon = telefon;
+        this.naziv_lokacije = naziv_lokacije;
+        this.datum_zaposljavanja = datum_zaposljavanja;
+    }
+
+    public Osobe(String ime, String prezime, String telefon,LocalDate datum_zaposljavanja,long JMBG, String naziv_lokacije,String password,String email) {
+        this.id = id;
+        this.JMBG = JMBG;
+        this.ime = ime;
+        this.prezime = prezime;
+        this.telefon = telefon;
+        this.naziv_lokacije = naziv_lokacije;
+        this.datum_zaposljavanja = datum_zaposljavanja;
+        this.email = email;
+        this.password = password;
+    }
+    public Osobe(int id,String ime, String prezime, String telefon,LocalDate datum_zaposljavanja,long JMBG, String naziv_lokacije,String password,String email) {
+        this.id = id;
+        this.JMBG = JMBG;
+        this.ime = ime;
+        this.prezime = prezime;
+        this.telefon = telefon;
+        this.naziv_lokacije = naziv_lokacije;
+        this.datum_zaposljavanja = datum_zaposljavanja;
+        this.email = email;
+        this.password = password;
     }
 
     public int getId() {
@@ -28,11 +62,11 @@ public class Osobe {
         this.id = id;
     }
 
-    public int getJMBG() {
+    public long getJMBG() {
         return JMBG;
     }
 
-    public void setJMBG(int JMBG) {
+    public void setJMBG(long JMBG) {
         this.JMBG = JMBG;
     }
 
@@ -74,5 +108,21 @@ public class Osobe {
 
     public void setDatum_zaposljavanja(LocalDate datum_zaposljavanja) {
         this.datum_zaposljavanja = datum_zaposljavanja;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
