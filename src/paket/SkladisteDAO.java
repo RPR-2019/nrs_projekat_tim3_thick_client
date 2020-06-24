@@ -20,8 +20,10 @@ public class SkladisteDAO {
     private SimpleObjectProperty<Proizvod> currentProduct = null;
     private SimpleObjectProperty<Kategorija> currentCategory = null;
     private SimpleObjectProperty<Osobe> currentEmployee = null;
+    private SimpleObjectProperty<Skladiste> currentWarehouse = null;
 
     private PreparedStatement getKorisnickiIdUpit,getDobavljacUpit,getAllDobavljaci,addProductDobavljacUpit,getDobavljacIdUpit,updateProductDobavljacUpit;
+    private PreparedStatement addWarehouseUpit,updateWarehouseUpit,deleteWarehouseUpit,getIdSkladiste;
 
     public static SkladisteDAO getInstance() {
         if (instance == null) instance = new SkladisteDAO();
@@ -90,6 +92,11 @@ public class SkladisteDAO {
             addProductDobavljacUpit = connection.prepareStatement("INSERT INTO proizvodi_dobavljaca VALUES(?,?)");
             getDobavljacIdUpit = connection.prepareStatement("SELECT id from dobavljaci where naziv=?");
             updateProductDobavljacUpit = connection.prepareStatement("UPDATE proizvodi_dobavljaca SET dobavljac_id=? where proizvod_id=?");
+
+            addWarehouseUpit = connection.prepareStatement("INSERT INTO Skladista VALUES(?,?,?)");
+            updateWarehouseUpit = connection.prepareStatement("UPDATE Skladista SET naziv=?,naziv_lokacije=? WHERE id=?");
+            deleteWarehouseUpit = connection.prepareStatement("DELETE FROM Skladista where id=?");
+            getIdSkladiste = connection.prepareStatement("SELECT Max(id) from skladista");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -111,6 +118,60 @@ public class SkladisteDAO {
             e.printStackTrace();
         }
         return admini;
+    }
+
+    public void addSkladiste(Skladiste sk) throws SQLException {
+        ResultSet rs = getIdSkladiste.executeQuery();
+        int id=1;
+        if(rs.next()){
+            id = rs.getInt(1);
+        }
+        id++;
+
+        addWarehouseUpit.setInt(1,id);
+        addWarehouseUpit.setString(2,sk.getNaziv());
+        addWarehouseUpit.setString(3,sk.getNaziv_lokacije());
+
+        addWarehouseUpit.executeUpdate();
+
+    }
+
+    public void updateSkladiste(Skladiste sk) throws SQLException {
+        try {
+            updateWarehouseUpit.setString(1,sk.getNaziv());
+            updateWarehouseUpit.setString(2,sk.getNaziv_lokacije());
+            updateWarehouseUpit.setInt(3,currentWarehouse.get().getId());
+
+            updateWarehouseUpit.executeUpdate();
+            currentWarehouse.setValue(sk);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Skladiste getCurrentWarehouse() {
+        return currentWarehouse.get();
+    }
+
+    public SimpleObjectProperty<Skladiste> currentWarehouseProperty() {
+        return currentWarehouse;
+    }
+
+    public void setCurrentWarehouse(Skladiste currentWarehouse) {
+        if (this.currentWarehouse == null) {
+            this.currentWarehouse = new SimpleObjectProperty<>(currentWarehouse);
+        } else {
+            this.currentWarehouse.set(currentWarehouse);
+        }
+    }
+
+    public void deleteWarehouse(){
+        try {
+            deleteWarehouseUpit.setInt(1,currentWarehouse.get().getId());
+            deleteWarehouseUpit.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public ArrayList<String> getDobavljaci(){

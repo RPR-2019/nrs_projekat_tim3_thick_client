@@ -1,5 +1,7 @@
 package paket;
 
+import javafx.beans.Observable;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -63,6 +65,17 @@ public class EditController {
         return false;
     }
 
+    public boolean ProvjeraDaLiVecPostojiProizvod(String str){
+        ObservableList<Proizvod> products = model.getProducts();
+
+        for(Proizvod p : products){
+            if(p.getNaziv().equals(str)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public EditController(Proizvod product){
         this.product = product;
     }
@@ -103,7 +116,7 @@ public class EditController {
         }
 
         fldNaziv.textProperty().addListener((obs, oldIme, newIme) -> {
-            if (!newIme.isEmpty()) {
+            if (!newIme.isEmpty() && !ProvjeraDaLiVecPostojiProizvod(newIme) && newIme.length() > 3) {
                 fldNaziv.getStyleClass().removeAll("poljeNijeIspravno");
                 fldNaziv.getStyleClass().add("poljeIspravno");
             } else {
@@ -172,7 +185,7 @@ public class EditController {
     }
 
     public void actOk(ActionEvent actionEvent) {
-        if(fldNaziv.getText().length() != 0  && DaLiJeBroj(fldKolicina.getText()) && DaLiJeBroj(fldCijena.getText()) && ispravanDobavljac(fldDobavljac.getText())) {
+        if(fldNaziv.getText().length() != 0  && !ProvjeraDaLiVecPostojiProizvod(fldNaziv.getText()) && DaLiJeBroj(fldKolicina.getText()) && DaLiJeBroj(fldCijena.getText()) && ispravanDobavljac(fldDobavljac.getText()) && IspravnaKategorija(fldKategorija.getText()) && IspravanProizvodjac(fldProizvodjac.getText())) {
             if (product == null) {
                 product = new Proizvod(fldNaziv.getText(), fldProizvodjac.getText(), fldKategorija.getText(), Integer.parseInt(fldCijena.getText()));
                 kolicina = Integer.parseInt(fldKolicina.getText());

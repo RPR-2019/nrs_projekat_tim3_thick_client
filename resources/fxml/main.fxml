@@ -175,7 +175,7 @@
                 <content>
                     <BorderPane prefHeight="200.0" prefWidth="200.0">
                      <top>
-                        <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                        <VBox prefHeight="204.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                            <children>
                               <Button fx:id="btnIzvjestaj" mnemonicParsing="false" onAction="#actIzvjestaj" text="Products">
                                  <VBox.margin>
@@ -187,14 +187,82 @@
                                     <Insets left="30.0" top="50.0" />
                                  </VBox.margin>
                               </Button>
+                              <Button mnemonicParsing="false" onAction="#actAvailableProducts" text="Available Products">
+                                 <VBox.margin>
+                                    <Insets left="240.0" top="-25.0" />
+                                 </VBox.margin>
+                              </Button>
+                              <Button mnemonicParsing="false" onAction="#actMostPopularProduct" text="Most popular product">
+                                 <VBox.margin>
+                                    <Insets left="240.0" top="-100.0" />
+                                 </VBox.margin>
+                              </Button>
                            </children>
+                           <BorderPane.margin>
+                              <Insets />
+                           </BorderPane.margin>
                         </VBox>
-                     </top></BorderPane>
+                     </top>
+                     <left>
+                        <Button fx:id="btnEmployeeLastMonth" mnemonicParsing="false" onAction="#actEmployeesLastMonth" text="EmployeesLastMonth" BorderPane.alignment="CENTER">
+                           <BorderPane.margin>
+                              <Insets left="30.0" top="-150.0" />
+                           </BorderPane.margin>
+                        </Button>
+                     </left></BorderPane>
+                </content>
+            </Tab>
+            <Tab text="Warehouse">
+                <content>
+                    <BorderPane prefHeight="200.0" prefWidth="200.0">
+                        <top>
+                            <VBox prefHeight="57.0" prefWidth="665.0" BorderPane.alignment="CENTER">
+                                <children>
+                                    <ButtonBar prefHeight="57.0" prefWidth="451.0">
+                                        <buttons>
+                                            <Button fx:id="btnAddWarehouse" mnemonicParsing="false" onAction="#actAddWarehouse">
+                                                <graphic>
+                                                    <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                        <image>
+                                                            <Image url="@../images/list-add.png" />
+                                                        </image></ImageView>
+                                                </graphic></Button>
+                                            <Button fx:id="btnEditWarehouse" mnemonicParsing="false" onAction="#actEditWarehouse">
+                                                <graphic>
+                                                    <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                        <image>
+                                                            <Image url="@../images/edit.png" />
+                                                        </image>
+                                                    </ImageView>
+                                                </graphic></Button>
+                                            <Button fx:id="btnDeleteWarehouse" mnemonicParsing="false" onAction="#actDeleteWarehouse">
+                                                <graphic>
+                                                    <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                        <image>
+                                                            <Image url="@../images/edit-delete.png" />
+                                                        </image>
+                                                    </ImageView>
+                                                </graphic></Button>
+                                        </buttons>
+                                        <VBox.margin>
+                                            <Insets right="400.0" />
+                                        </VBox.margin>
+                                    </ButtonBar>
+                                </children>
+                            </VBox>
+                        </top>
+                        <center>
+                            <TableView fx:id="tbWarehouses" prefHeight="368.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+                                <columns>
+                                    <TableColumn fx:id="colNazivWarehouse" prefWidth="209.0" text="Name" />
+                                    <TableColumn fx:id="colLocationWarehouse" minWidth="0.0" prefWidth="237.0" text="Location name" />
+                                </columns>
+                            </TableView>
+                        </center>
+                    </BorderPane>
                 </content>
             </Tab>
         </tabs>
       </TabPane>
    </center>
-
-    
 </BorderPane>
