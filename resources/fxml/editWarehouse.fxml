@@ -19,11 +19,11 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
-        <Label text="Naziv">
+        <Label text="%Naziv">
          <padding>
             <Insets left="5.0" />
          </padding></Label>
-        <Label text="Lokacija" GridPane.rowIndex="1">
+        <Label text="%Lokacija" GridPane.rowIndex="1">
          <GridPane.margin>
             <Insets left="5.0" />
          </GridPane.margin></Label>

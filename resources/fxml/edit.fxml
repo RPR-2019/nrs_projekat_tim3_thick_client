@@ -23,10 +23,25 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
-        <Label text="  Naziv" />
-        <Label text="  Proizvodjac" GridPane.rowIndex="1" />
-        <Label text="  Kategorija" GridPane.rowIndex="2" />
-        <Label text="  Cijena" GridPane.rowIndex="3" />
+        <Label text="%Naziv">
+         <GridPane.margin>
+            <Insets left="5.0" />
+         </GridPane.margin></Label>
+        <Label text="%Proizvodjac" GridPane.rowIndex="1">
+         <GridPane.margin>
+            <Insets left="5.0" />
+         </GridPane.margin></Label>
+        <Label text="%Kategorija" GridPane.rowIndex="2">
+         <GridPane.margin>
+            <Insets left="5.0" />
+         </GridPane.margin></Label>
+        <Label text="%Cijena" GridPane.rowIndex="3">
+         <opaqueInsets>
+            <Insets left="5.0" />
+         </opaqueInsets>
+         <GridPane.margin>
+            <Insets left="5.0" />
+         </GridPane.margin></Label>
         <ButtonBar prefHeight="33.0" prefWidth="163.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
             <buttons>
                 <Button fx:id="btnOk" mnemonicParsing="false" onAction="#actOk" text="Ok" />
@@ -56,13 +71,16 @@
             <Insets right="30.0" />
         </GridPane.margin>
       </TextField>
-      <Label text="  Kolicina" GridPane.rowIndex="4" />
+      <Label text="%Kolicina" GridPane.rowIndex="4">
+         <GridPane.margin>
+            <Insets left="5.0" />
+         </GridPane.margin></Label>
       <TextField fx:id="fldKolicina" GridPane.columnIndex="1" GridPane.rowIndex="4">
           <GridPane.margin>
               <Insets right="30.0" />
           </GridPane.margin>
       </TextField>
-      <Label text="Dobavljac" GridPane.rowIndex="5">
+      <Label text="%Dobavljac" GridPane.rowIndex="5">
          <padding>
             <Insets left="6.0" />
          </padding>

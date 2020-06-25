@@ -6,14 +6,14 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="433.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="433.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="paket.MainController">
     <stylesheets>
         <URL value="@/css/forma.css" />
     </stylesheets>
    <center>
-      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+      <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
-          <Tab text="Products">
+          <Tab text="%Proizvodi">
               <content>
                   <BorderPane prefHeight="200.0" prefWidth="200.0">
                      <top>
@@ -60,16 +60,16 @@
                      <center>
                         <TableView fx:id="tbProducts" prefHeight="368.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                           <columns>
-                              <TableColumn fx:id="colName" prefWidth="143.0" text="name" />
-                              <TableColumn fx:id="colManufacturer" prefWidth="152.0" text="manufacturer" />
-                              <TableColumn fx:id="colCategory" minWidth="0.0" prefWidth="156.0" text="category" />
-                              <TableColumn fx:id="colPrice" prefWidth="148.0" text="price" />
+                              <TableColumn fx:id="colName" prefWidth="143.0" text="%Naziv" />
+                              <TableColumn fx:id="colManufacturer" prefWidth="152.0" text="%Proizvodjac" />
+                              <TableColumn fx:id="colCategory" minWidth="0.0" prefWidth="156.0" text="%Kategorija" />
+                              <TableColumn fx:id="colPrice" prefWidth="148.0" text="%Cijena" />
                           </columns>
                         </TableView>
                      </center></BorderPane>
               </content>
           </Tab>
-          <Tab text="Categories">
+          <Tab text="%Kategorije">
               <content>
                   <BorderPane prefHeight="200.0" prefWidth="200.0">
                       <top>
@@ -111,14 +111,14 @@
                       <center>
                           <TableView fx:id="tbCategories" prefHeight="368.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                               <columns>
-                                  <TableColumn fx:id="colNameCat" prefWidth="599.0" text="name" />
+                                  <TableColumn fx:id="colNameCat" prefWidth="599.0" text="%Naziv" />
                               </columns>
                           </TableView>
                       </center>
                   </BorderPane>
               </content>
           </Tab>
-            <Tab text="Employees">
+            <Tab text="%Uposlenici">
                 <content>
                     <BorderPane prefHeight="200.0" prefWidth="200.0">
                         <top>
@@ -160,39 +160,39 @@
                         <center>
                             <TableView fx:id="tbEmployees" prefHeight="368.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                                 <columns>
-                                    <TableColumn fx:id="colFullName" prefWidth="113.0" text="Name" />
-                                    <TableColumn fx:id="colPhone" minWidth="0.0" prefWidth="115.0" text="Phone" />
-                                    <TableColumn fx:id="colDatum_zapsl" prefWidth="113.0" text="Employee date" />
-                                    <TableColumn fx:id="colJMBG" prefWidth="120.0" text="JMBG" />
-                                    <TableColumn fx:id="colNazivLok" prefWidth="140.0" text="Location" />
+                                    <TableColumn fx:id="colFullName" prefWidth="113.0" text="%Ime" />
+                                    <TableColumn fx:id="colPhone" minWidth="0.0" prefWidth="115.0" text="%Telefon" />
+                                    <TableColumn fx:id="colDatum_zapsl" prefWidth="140.0" text="%Datum_zaposlenja" />
+                                    <TableColumn fx:id="colJMBG" prefWidth="93.0" text="JMBG" />
+                                    <TableColumn fx:id="colNazivLok" prefWidth="140.0" text="%Lokacija" />
                                 </columns>
                             </TableView>
                         </center>
                     </BorderPane>
                 </content>
             </Tab>
-            <Tab text="Izvjestaji">
+            <Tab text="%Izvjestaji">
                 <content>
                     <BorderPane prefHeight="200.0" prefWidth="200.0">
                      <top>
                         <VBox prefHeight="204.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Button fx:id="btnIzvjestaj" mnemonicParsing="false" onAction="#actIzvjestaj" text="Products">
+                              <Button fx:id="btnIzvjestaj" mnemonicParsing="false" onAction="#actIzvjestaj" text="%Proizvodi">
                                  <VBox.margin>
                                     <Insets left="30.0" top="50.0" />
                                  </VBox.margin>
                               </Button>
-                              <Button fx:id="btnIzvjestajEmployees" mnemonicParsing="false" onAction="#actIzvjestajEmployees" text="Employees">
+                              <Button fx:id="btnIzvjestajEmployees" mnemonicParsing="false" onAction="#actIzvjestajEmployees" text="%Uposlenici">
                                  <VBox.margin>
                                     <Insets left="30.0" top="50.0" />
                                  </VBox.margin>
                               </Button>
-                              <Button mnemonicParsing="false" onAction="#actAvailableProducts" text="Available Products">
+                              <Button mnemonicParsing="false" onAction="#actAvailableProducts" text="%DostupniProizvodi">
                                  <VBox.margin>
                                     <Insets left="240.0" top="-25.0" />
                                  </VBox.margin>
                               </Button>
-                              <Button mnemonicParsing="false" onAction="#actMostPopularProduct" text="Most popular product">
+                              <Button mnemonicParsing="false" onAction="#actMostPopularProduct" text="%NajpopularnijiProizvod">
                                  <VBox.margin>
                                     <Insets left="240.0" top="-100.0" />
                                  </VBox.margin>
@@ -204,7 +204,7 @@
                         </VBox>
                      </top>
                      <left>
-                        <Button fx:id="btnEmployeeLastMonth" mnemonicParsing="false" onAction="#actEmployeesLastMonth" text="EmployeesLastMonth" BorderPane.alignment="CENTER">
+                        <Button fx:id="btnEmployeeLastMonth" mnemonicParsing="false" onAction="#actEmployeesLastMonth" text="%UposleniciPrethodniMjesec" BorderPane.alignment="CENTER">
                            <BorderPane.margin>
                               <Insets left="30.0" top="-150.0" />
                            </BorderPane.margin>
@@ -212,7 +212,7 @@
                      </left></BorderPane>
                 </content>
             </Tab>
-            <Tab text="Warehouse">
+            <Tab text="%Skladiste">
                 <content>
                     <BorderPane prefHeight="200.0" prefWidth="200.0">
                         <top>
@@ -254,12 +254,31 @@
                         <center>
                             <TableView fx:id="tbWarehouses" prefHeight="368.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                                 <columns>
-                                    <TableColumn fx:id="colNazivWarehouse" prefWidth="209.0" text="Name" />
-                                    <TableColumn fx:id="colLocationWarehouse" minWidth="0.0" prefWidth="237.0" text="Location name" />
+                                    <TableColumn fx:id="colNazivWarehouse" prefWidth="209.0" text="%Naziv" />
+                                    <TableColumn fx:id="colLocationWarehouse" minWidth="0.0" prefWidth="237.0" text="%Lokacija" />
                                 </columns>
                             </TableView>
                         </center>
                     </BorderPane>
+                </content>
+            </Tab>
+            <Tab text="%Jezik">
+                <content>
+                    <HBox prefHeight="57.0" prefWidth="665.0" BorderPane.alignment="CENTER">
+                     <children>
+                         <Label text="%Jezik">
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <HBox.margin>
+                              <Insets left="40.0" top="65.0" />
+                           </HBox.margin></Label>
+                        <ChoiceBox fx:id="spinnerLanguage" prefWidth="150.0">
+                           <HBox.margin>
+                              <Insets left="60.0" top="60.0" />
+                           </HBox.margin>
+                        </ChoiceBox>
+                     </children></HBox>
                 </content>
             </Tab>
         </tabs>

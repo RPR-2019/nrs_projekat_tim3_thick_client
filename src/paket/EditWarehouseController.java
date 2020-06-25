@@ -30,7 +30,7 @@ public class EditWarehouseController {
             fldLokacija.setText(skladiste.getNaziv_lokacije());
         }
 
-        fldNaziv.textProperty().addListener((obs, oldIme, newIme) -> {               // Kategorija koja se unosi mora biti jednaka nekoj iz baze
+        fldNaziv.textProperty().addListener((obs, oldIme, newIme) -> {
             if (!newIme.isEmpty() && newIme.length() > 3) {
                 fldNaziv.getStyleClass().removeAll("poljeNijeIspravno");
                 fldNaziv.getStyleClass().add("poljeIspravno");
@@ -39,7 +39,7 @@ public class EditWarehouseController {
                 fldNaziv.getStyleClass().add("poljeNijeIspravno");
             }
         });
-        fldLokacija.textProperty().addListener((obs, oldIme, newIme) -> {               // Kategorija koja se unosi mora biti jednaka nekoj iz baze
+        fldLokacija.textProperty().addListener((obs, oldIme, newIme) -> {
             if (!newIme.isEmpty() && newIme.length() > 3) {
                 fldLokacija.getStyleClass().removeAll("poljeNijeIspravno");
                 fldLokacija.getStyleClass().add("poljeIspravno");
@@ -51,9 +51,11 @@ public class EditWarehouseController {
     }
 
     public void actOk(ActionEvent actionEvent) {
-        skladiste = new Skladiste(fldNaziv.getText(),fldLokacija.getText());
-        Stage stage = (Stage) btnOk.getScene().getWindow();
-        stage.close();
+        if(fldNaziv.getText().length() > 3 && fldLokacija.getText().length() > 3) {
+            skladiste = new Skladiste(fldNaziv.getText(), fldLokacija.getText());
+            Stage stage = (Stage) btnOk.getScene().getWindow();
+            stage.close();
+        }
     }
 
     public void actCancel(ActionEvent actionEvent) {

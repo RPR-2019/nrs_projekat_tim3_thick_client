@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<?import java.net.URL?>
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="220.0" prefWidth="299.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="158.0" prefWidth="334.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
         <URL value="@/css/forma.css" />
     </stylesheets>
     <columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="144.0" minWidth="10.0" prefWidth="90.0" />
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="288.0" minWidth="10.0" prefWidth="209.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="144.0" minWidth="10.0" prefWidth="113.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="288.0" minWidth="10.0" prefWidth="236.0" />
     </columnConstraints>
     <rowConstraints>
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -19,8 +19,20 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
-        <Label text="  Naziv" />
-        <Label text="  NadKategorija:" GridPane.rowIndex="1" />
+        <Label text="%Naziv">
+         <opaqueInsets>
+            <Insets left="5.0" />
+         </opaqueInsets>
+         <GridPane.margin>
+            <Insets left="5.0" />
+         </GridPane.margin></Label>
+        <Label text="%NadKategorija" GridPane.rowIndex="1">
+         <opaqueInsets>
+            <Insets left="5.0" />
+         </opaqueInsets>
+         <GridPane.margin>
+            <Insets left="5.0" />
+         </GridPane.margin></Label>
         <ButtonBar prefHeight="33.0" prefWidth="163.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
             <buttons>
                 <Button fx:id="btnOk" mnemonicParsing="false" onAction="#actOk" text="Ok" />
@@ -32,12 +44,12 @@
         </ButtonBar>
         <TextField fx:id="fldNaziv" GridPane.columnIndex="1">
             <GridPane.margin>
-                <Insets right="30.0" />
+                <Insets right="50.0" />
             </GridPane.margin>
         </TextField>
-        <TextField fx:id="fldNadKategorija" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <TextField fx:id="fldNadKategorija" prefHeight="25.0" prefWidth="186.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
             <GridPane.margin>
-                <Insets right="30.0" />
+                <Insets right="50.0" />
             </GridPane.margin>
         </TextField>
     </children>

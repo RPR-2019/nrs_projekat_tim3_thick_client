@@ -150,6 +150,7 @@ public class SkladisteDAO {
     }
 
     public Skladiste getCurrentWarehouse() {
+        if(currentWarehouse == null) return null;
         return currentWarehouse.get();
     }
 
@@ -664,7 +665,7 @@ public class SkladisteDAO {
 
             while(rs.next()) {
                 Osobe o = new Osobe(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getDate(5).toLocalDate(),
-                        rs.getLong(6), rs.getString(7),rs.getString(8),rs.getString(9));
+                        rs.getString(6), rs.getString(7),rs.getString(8),rs.getString(9));
 
                 osobe.add(o);
             }
@@ -675,6 +676,7 @@ public class SkladisteDAO {
     }
 
     public Osobe getCurrentEmployee() {
+        if(currentEmployee == null) return null;
         return currentEmployee.get();
     }
 
@@ -728,12 +730,15 @@ public class SkladisteDAO {
 
     public void deleteEmployee(){
         try {
-            deleteEmployeeKor.setInt(1,currentEmployee.get().getId());
-            deleteEmployeeKor.executeUpdate();
+            if(currentEmployee != null) {
+                deleteEmployeeKor.setInt(1, currentEmployee.get().getId());
+                deleteEmployeeKor.executeUpdate();
 
-            deleteEmployee.setInt(1,currentEmployee.get().getId());
-            deleteEmployee.executeUpdate();
+                deleteEmployee.setInt(1, currentEmployee.get().getId());
+                deleteEmployee.executeUpdate();
 
+                currentEmployee = null;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

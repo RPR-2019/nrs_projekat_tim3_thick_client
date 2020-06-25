@@ -57,7 +57,7 @@ public class EditEmployeeController {
         }
 
         fldFirstName.textProperty().addListener((obs, oldIme, newIme) -> {               // Kategorija koja se unosi mora biti jednaka nekoj iz baze
-            if (!newIme.isEmpty()) {
+            if (!newIme.isEmpty() && newIme.length() > 2) {
                 fldFirstName.getStyleClass().removeAll("poljeNijeIspravno");
                 fldFirstName.getStyleClass().add("poljeIspravno");
             } else {
@@ -66,7 +66,7 @@ public class EditEmployeeController {
             }
         });
         fldLastName.textProperty().addListener((obs, oldIme, newIme) -> {               // Kategorija koja se unosi mora biti jednaka nekoj iz baze
-            if (!newIme.isEmpty()) {
+            if (!newIme.isEmpty() && newIme.length() > 2) {
                 fldLastName.getStyleClass().removeAll("poljeNijeIspravno");
                 fldLastName.getStyleClass().add("poljeIspravno");
             } else {
@@ -75,7 +75,7 @@ public class EditEmployeeController {
             }
         });
         fldPhone.textProperty().addListener((obs, oldIme, newIme) -> {               // Kategorija koja se unosi mora biti jednaka nekoj iz baze
-            if (!newIme.isEmpty()) {
+            if (!newIme.isEmpty() && newIme.length() > 5) {
                 fldPhone.getStyleClass().removeAll("poljeNijeIspravno");
                 fldPhone.getStyleClass().add("poljeIspravno");
             } else {
@@ -83,7 +83,7 @@ public class EditEmployeeController {
                 fldPhone.getStyleClass().add("poljeNijeIspravno");
             }
         });
-        fldDate.textProperty().addListener((obs, oldIme, newIme) -> {               // Kategorija koja se unosi mora biti jednaka nekoj iz baze
+        fldDate.textProperty().addListener((obs, oldIme, newIme) -> {
             if (!newIme.isEmpty()) {
                 fldDate.getStyleClass().removeAll("poljeNijeIspravno");
                 fldDate.getStyleClass().add("poljeIspravno");
@@ -92,8 +92,8 @@ public class EditEmployeeController {
                 fldDate.getStyleClass().add("poljeNijeIspravno");
             }
         });
-        fldJMBG.textProperty().addListener((obs, oldIme, newIme) -> {               // Kategorija koja se unosi mora biti jednaka nekoj iz baze
-            if (!newIme.isEmpty() && EditController.DaLiJeBroj(newIme)) {
+        fldJMBG.textProperty().addListener((obs, oldIme, newIme) -> {
+            if (!newIme.isEmpty() && EditController.DaLiJeBroj(newIme) && newIme.length() == 13) {
                 fldJMBG.getStyleClass().removeAll("poljeNijeIspravno");
                 fldJMBG.getStyleClass().add("poljeIspravno");
             } else {
@@ -101,7 +101,7 @@ public class EditEmployeeController {
                 fldJMBG.getStyleClass().add("poljeNijeIspravno");
             }
         });
-        fldEmail.textProperty().addListener((obs, oldIme, newIme) -> {               // Kategorija koja se unosi mora biti jednaka nekoj iz baze
+        fldEmail.textProperty().addListener((obs, oldIme, newIme) -> {
             if (!newIme.isEmpty() && validacijaEmaila(newIme)) {
                 fldEmail.getStyleClass().removeAll("poljeNijeIspravno");
                 fldEmail.getStyleClass().add("poljeIspravno");
@@ -110,7 +110,7 @@ public class EditEmployeeController {
                 fldEmail.getStyleClass().add("poljeNijeIspravno");
             }
         });
-        fldPassword.textProperty().addListener((obs, oldIme, newIme) -> {               // Kategorija koja se unosi mora biti jednaka nekoj iz baze
+        fldPassword.textProperty().addListener((obs, oldIme, newIme) -> {
             if (!newIme.isEmpty() && checkPassword(newIme)) {
                 fldPassword.getStyleClass().removeAll("poljeNijeIspravno");
                 fldPassword.getStyleClass().add("poljeIspravno");
@@ -179,7 +179,7 @@ public class EditEmployeeController {
         if(!(fldFirstName.getText().isEmpty()) && !(fldLastName.getText().isEmpty()) && !(fldPhone.getText().isEmpty()) && (EditController.DaLiJeBroj(fldJMBG.getText()))
         && validacijaEmaila(fldEmail.getText()) && checkPassword(fldPassword.getText())) {
             employee = new Osobe(fldFirstName.getText(), fldLastName.getText(), fldPhone.getText(), LocalDate.parse(fldDate.getText()),
-                    Integer.parseInt(fldJMBG.getText()), fldLocation.getText(), fldPassword.getText(), fldEmail.getText());
+                    fldJMBG.getText(), fldLocation.getText(), fldPassword.getText(), fldEmail.getText());
 
             Stage stage = (Stage) btnOk.getScene().getWindow();
             stage.close();

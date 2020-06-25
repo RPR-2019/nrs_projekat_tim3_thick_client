@@ -21,12 +21,13 @@ import net.sf.jasperreports.engine.JRException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
 public class MainController {
-
     public TableColumn colName;
     public TableColumn colManufacturer;
     public TableColumn colCategory;
@@ -48,15 +49,17 @@ public class MainController {
     public TableView tbWarehouses;
     public TableColumn colNazivWarehouse;
     public TableColumn colLocationWarehouse;
+    public TabPane tabPane;
     private Skladiste sk;
-    private int br=0;
+    private  int br=0;
     public ObservableList<Kategorija> kategorije = FXCollections.observableArrayList();
     public TableView tbCategories;
     public TableColumn colNameCat;
+    public ChoiceBox spinnerLanguage;
 
-    public MainController(SkladisteDAO model){
-        this.model = model;
-    }
+   // public MainController(SkladisteDAO model){
+   //     this.model = model;
+   // }
 
     @FXML
     public void initialize(){
@@ -210,14 +213,54 @@ public class MainController {
                 tbWarehouses.refresh();
             }
         });
-    }
 
+        if(spinnerLanguage.getItems().size() != 0){
+            spinnerLanguage.getItems().clear();
+        }
+
+        spinnerLanguage.getSelectionModel().select(Locale.getDefault().getLanguage());
+        spinnerLanguage.getItems().add("bs");
+        spinnerLanguage.getItems().add("en");
+
+
+        spinnerLanguage.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
+                if(newValue != null) {
+           //         spinnerLanguage.getSelectionModel().select(newValue);
+                    if(newValue.equals("bs")) {
+                      //  spinnerLanguage.getSelectionModel().select("Bosnian");
+                        Locale.setDefault(new Locale("bs", "BA"));
+                        try {
+                            ResourceBundle bundle = ResourceBundle.getBundle("Translation");
+                            Stage stage = (Stage) tabPane.getScene().getWindow();
+                            FXMLLoader loader = new FXMLLoader( getClass().getResource("/fxml/main.fxml" ), bundle);
+                            stage.setScene(new Scene(loader.load()));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Locale.setDefault(new Locale("en", "US"));
+                        try {
+                            ResourceBundle bundle = ResourceBundle.getBundle("Translation");
+                            Stage stage = (Stage) tabPane.getScene().getWindow();
+                            FXMLLoader loader = new FXMLLoader( getClass().getResource("/fxml/main.fxml" ), bundle);
+                            stage.setScene(new Scene(loader.load()));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        });
+    }
 
     public void actAdd(ActionEvent actionEvent) {
         Stage editProductWindow = new Stage();
         Parent root = null;
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/edit.fxml"));
+            ResourceBundle bundle = ResourceBundle.getBundle("Translation");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/edit.fxml"),bundle);
             EditController editController = new EditController(null);
             loader.setController(editController);
             root = loader.load();
@@ -250,7 +293,8 @@ public class MainController {
     }
 
         public void actEdit(ActionEvent actionEvent) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/edit.fxml"));
+        ResourceBundle bundle = ResourceBundle.getBundle("Translation");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/edit.fxml"),bundle);
         Proizvod proizvod = model.getCurrentProduct();
         EditController editController = new EditController(proizvod);
         Stage editBookWindow = new Stage();
@@ -306,10 +350,11 @@ public class MainController {
     }
 
     public void actAddCat(ActionEvent actionEvent) {
+        ResourceBundle bundle = ResourceBundle.getBundle("Translation");
         Stage editCategoryWindow = new Stage();
         Parent root = null;
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editCategory.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editCategory.fxml"),bundle);
             EditCategoryController editCategoryController = new EditCategoryController(null);
             loader.setController(editCategoryController);
             root = loader.load();
@@ -335,10 +380,11 @@ public class MainController {
     }
 
     public void actEditCat(ActionEvent actionEvent) {
+        ResourceBundle bundle = ResourceBundle.getBundle("Translation");
         Stage editCategoryWindow = new Stage();
         Parent root = null;
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editCategory.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editCategory.fxml"),bundle);
             Kategorija kat = model.getCurrentCategory();
             EditCategoryController editCategoryController = new EditCategoryController(kat);
             loader.setController(editCategoryController);
@@ -380,7 +426,8 @@ public class MainController {
     }
 
     public void actAddEmployee(ActionEvent actionEvent) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editEmployee.fxml"));
+        ResourceBundle bundle = ResourceBundle.getBundle("Translation");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editEmployee.fxml"),bundle);
         EditEmployeeController editController = new EditEmployeeController(null);
         Stage editEmployeeWindow = new Stage();
         loader.setController(editController);
@@ -405,10 +452,11 @@ public class MainController {
     }
 
     public void actEditEmployee(ActionEvent actionEvent) {
+        ResourceBundle bundle = ResourceBundle.getBundle("Translation");
         Stage editCategoryWindow = new Stage();
         Parent root = null;
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editEmployee.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editEmployee.fxml"),bundle);
             Osobe o = model.getCurrentEmployee();
             EditEmployeeController editController = new EditEmployeeController(o);
             loader.setController(editController);
@@ -474,7 +522,8 @@ public class MainController {
     }
 
     public void actAddWarehouse(ActionEvent actionEvent) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editWarehouse.fxml"));
+        ResourceBundle bundle = ResourceBundle.getBundle("Translation");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editWarehouse.fxml"),bundle);
         EditWarehouseController editController = new EditWarehouseController(null);
         Stage editWarehouseWindow = new Stage();
         loader.setController(editController);
@@ -503,7 +552,8 @@ public class MainController {
     }
 
     public void actEditWarehouse(ActionEvent actionEvent) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editWarehouse.fxml"));
+        ResourceBundle bundle = ResourceBundle.getBundle("Translation");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editWarehouse.fxml"),bundle);
         Skladiste skl = model.getCurrentWarehouse();
         EditWarehouseController editController = new EditWarehouseController(skl);
         Stage editWarehouseWindow = new Stage();

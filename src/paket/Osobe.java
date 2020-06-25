@@ -4,14 +4,14 @@ import java.time.LocalDate;
 
 public class Osobe {
     private int id;
-    private Long JMBG;
-    private String ime,prezime,telefon,naziv_lokacije,email,password;
+  //  private Long JMBG;
+    private String ime,prezime,telefon,naziv_lokacije,email,password,JMBG;
     private LocalDate datum_zaposljavanja;
 
     public Osobe() {
     }
 
-    public Osobe(int id, String ime, String prezime, String telefon,LocalDate datum_zaposljavanja,long JMBG, String naziv_lokacije) {
+    public Osobe(int id, String ime, String prezime, String telefon,LocalDate datum_zaposljavanja,String JMBG, String naziv_lokacije) {
         this.id = id;
         this.JMBG = JMBG;
         this.ime = ime;
@@ -21,7 +21,7 @@ public class Osobe {
         this.datum_zaposljavanja = datum_zaposljavanja;
     }
 
-    public Osobe(String ime, String prezime, String telefon,LocalDate datum_zaposljavanja,long JMBG, String naziv_lokacije) {
+    public Osobe(String ime, String prezime, String telefon,LocalDate datum_zaposljavanja,String JMBG, String naziv_lokacije) {
         this.id = id;
         this.JMBG = JMBG;
         this.ime = ime;
@@ -31,7 +31,7 @@ public class Osobe {
         this.datum_zaposljavanja = datum_zaposljavanja;
     }
 
-    public Osobe(String ime, String prezime, String telefon,LocalDate datum_zaposljavanja,long JMBG, String naziv_lokacije,String password,String email) {
+    public Osobe(String ime, String prezime, String telefon,LocalDate datum_zaposljavanja,String JMBG, String naziv_lokacije,String password,String email) {
         this.id = id;
         this.JMBG = JMBG;
         this.ime = ime;
@@ -42,7 +42,7 @@ public class Osobe {
         this.email = email;
         this.password = password;
     }
-    public Osobe(int id,String ime, String prezime, String telefon,LocalDate datum_zaposljavanja,long JMBG, String naziv_lokacije,String password,String email) {
+    public Osobe(int id,String ime, String prezime, String telefon,LocalDate datum_zaposljavanja,String JMBG, String naziv_lokacije,String password,String email) {
         this.id = id;
         this.JMBG = JMBG;
         this.ime = ime;
@@ -62,11 +62,11 @@ public class Osobe {
         this.id = id;
     }
 
-    public long getJMBG() {
+    public String getJMBG() {
         return JMBG;
     }
 
-    public void setJMBG(long JMBG) {
+    public void setJMBG(String JMBG) {
         this.JMBG = JMBG;
     }
 
