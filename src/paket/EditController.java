@@ -185,7 +185,7 @@ public class EditController {
     }
 
     public void actOk(ActionEvent actionEvent) {
-        if(fldNaziv.getText().length() != 0  && !ProvjeraDaLiVecPostojiProizvod(fldNaziv.getText()) && DaLiJeBroj(fldKolicina.getText()) && DaLiJeBroj(fldCijena.getText()) && ispravanDobavljac(fldDobavljac.getText()) && IspravnaKategorija(fldKategorija.getText()) && IspravanProizvodjac(fldProizvodjac.getText())) {
+        if(fldNaziv.getText().length() != 0  && (product == null  && !ProvjeraDaLiVecPostojiProizvod(fldNaziv.getText()) || (product != null )) && DaLiJeBroj(fldKolicina.getText()) && DaLiJeBroj(fldCijena.getText()) && ispravanDobavljac(fldDobavljac.getText()) && IspravnaKategorija(fldKategorija.getText()) && IspravanProizvodjac(fldProizvodjac.getText())) {
             if (product == null) {
                 product = new Proizvod(fldNaziv.getText(), fldProizvodjac.getText(), fldKategorija.getText(), Integer.parseInt(fldCijena.getText()));
                 kolicina = Integer.parseInt(fldKolicina.getText());
@@ -196,7 +196,6 @@ public class EditController {
             kolicina = Integer.parseInt(fldKolicina.getText());
             product.setKolicina(Integer.parseInt(fldKolicina.getText()));
             product.setDobavljac(fldDobavljac.getText());
-
             Stage stage = (Stage) btnOk.getScene().getWindow();
             stage.close();
         }

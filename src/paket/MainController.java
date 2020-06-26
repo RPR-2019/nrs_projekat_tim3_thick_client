@@ -6,6 +6,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -24,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.logging.Filter;
 
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
@@ -38,10 +41,10 @@ public class MainController {
     public TableView tbProducts;
     public TableColumn colPrice;
     public ChoiceBox spinnerSkladiste;
-    public  ObservableList<Proizvod> obsProizvodi = FXCollections.observableArrayList();
+    public ObservableList<Proizvod> obsProizvodi = FXCollections.observableArrayList();
     public Tab tabCategories;
     public TableView tbEmployees;
-    public TableColumn<Osobe,String> colFullName;
+    public TableColumn<Osobe, String> colFullName;
     public TableColumn colPhone;
     public TableColumn colDatum_zapsl;
     public TableColumn colJMBG;
@@ -50,79 +53,87 @@ public class MainController {
     public TableColumn colNazivWarehouse;
     public TableColumn colLocationWarehouse;
     public TabPane tabPane;
+    public TableView tbAvailableProducts;
+    public TableColumn colAvName;
+    public TableColumn colAvManufacturer;
+    public TableColumn colAvCategory;
+    public TableColumn colAvPrice;
+    public ChoiceBox spinnerSkl;
+    public TextField fldPretraga;
     private Skladiste sk;
-    private  int br=0;
+    private Skladiste sk1;
+    private int br = 0;
     public ObservableList<Kategorija> kategorije = FXCollections.observableArrayList();
     public TableView tbCategories;
     public TableColumn colNameCat;
     public ChoiceBox spinnerLanguage;
 
-   // public MainController(SkladisteDAO model){
-   //     this.model = model;
-   // }
+
+    // public MainController(SkladisteDAO model){
+    //     this.model = model;
+    // }
 
     @FXML
-    public void initialize(){
+    public void initialize() {
         this.model = new SkladisteDAO();
-        colName.setCellValueFactory(new PropertyValueFactory<Proizvod,String>("naziv"));
-        colManufacturer.setCellValueFactory(new PropertyValueFactory<Proizvod,String>("proizvodjac"));
-        colCategory.setCellValueFactory(new PropertyValueFactory<Proizvod,String>("kategorija"));
-        colPrice.setCellValueFactory(new PropertyValueFactory<Proizvod,Integer>("cijena"));
+        colName.setCellValueFactory(new PropertyValueFactory<Proizvod, String>("naziv"));
+        colManufacturer.setCellValueFactory(new PropertyValueFactory<Proizvod, String>("proizvodjac"));
+        colCategory.setCellValueFactory(new PropertyValueFactory<Proizvod, String>("kategorija"));
+        colPrice.setCellValueFactory(new PropertyValueFactory<Proizvod, Integer>("cijena"));
 
         obsProizvodi.clear();
         ArrayList<Skladiste> skladista = model.getSkladista();
         String skl = "";
-        if(spinnerSkladiste.getItems().size() != 0) {
+        if (spinnerSkladiste.getItems().size() != 0) {
             skl = spinnerSkladiste.getSelectionModel().getSelectedItem().toString();  // Prije nego sto se obrise spasi zadnji selektovani item
             spinnerSkladiste.getItems().clear();
         }
 
         br++;
 
-        for(int i=0 ; i<skladista.size() ; i++){
+        for (int i = 0; i < skladista.size(); i++) {
             spinnerSkladiste.getItems().add(skladista.get(i).getNaziv());
         }
 
-        if(skl != null) spinnerSkladiste.getSelectionModel().select(skl);
+        if (skl != null) spinnerSkladiste.getSelectionModel().select(skl);
 
 
         sk = skladista.get(0);
 
-        if(br == 1){
+        if (br == 1) {
             ArrayList<Proizvod> proizvods = model.getProizvodiSkladista(skladista.get(0));
-            for(int j=0 ; j<proizvods.size() ; j++){
+            for (int j = 0; j < proizvods.size(); j++) {
                 obsProizvodi.add(proizvods.get(j));
             }
             spinnerSkladiste.getSelectionModel().select(skladista.get(0).getNaziv());
         }
 
-
         tbProducts.setItems(obsProizvodi);
-    //    tbProducts.setItems(obsKolicine);
+        //    tbProducts.setItems(obsKolicine);
 
-            spinnerSkladiste.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-                @Override
-                public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-                    obsProizvodi.clear();
+        spinnerSkladiste.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
+                obsProizvodi.clear();
                 //    System.out.println(oldValue + " " + newValue);
-                    //   System.out.println(newValue);
-                    if(newValue != null) {
-                        spinnerSkladiste.getSelectionModel().select(newValue);
-                        for (int i = 0; i < skladista.size(); i++) {
-                         //   System.out.println(newValue + " " + skladista.get(i).getNaziv());
-                            if (newValue.equals(skladista.get(i).getNaziv())) {
-                                ArrayList<Proizvod> proizvodi = model.getProizvodiSkladista(skladista.get(i));
-                                for (int j = 0; j < proizvodi.size(); j++) {
-                                    obsProizvodi.add(proizvodi.get(j));
-                                }
-                                sk = skladista.get(i);
-                                break;
+                //   System.out.println(newValue);
+                if (newValue != null) {
+                    spinnerSkladiste.getSelectionModel().select(newValue);
+                    for (int i = 0; i < skladista.size(); i++) {
+                        //   System.out.println(newValue + " " + skladista.get(i).getNaziv());
+                        if (newValue.equals(skladista.get(i).getNaziv())) {
+                            ArrayList<Proizvod> proizvodi = model.getProizvodiSkladista(skladista.get(i));
+                            for (int j = 0; j < proizvodi.size(); j++) {
+                                obsProizvodi.add(proizvodi.get(j));
                             }
+                            sk = skladista.get(i);
+                            break;
                         }
                     }
                 }
-            });
-            
+            }
+        });
+
         tbProducts.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Proizvod>() {
             @Override
             public void changed(ObservableValue<? extends Proizvod> observableValue, Proizvod oldProduct, Proizvod newProduct) {
@@ -138,14 +149,14 @@ public class MainController {
             }
         });
 
-       this.modelKat = new SkladisteDAO();
+        this.modelKat = new SkladisteDAO();
 
-        colNameCat.setCellValueFactory(new PropertyValueFactory<Kategorija,String>("naziv"));
+        colNameCat.setCellValueFactory(new PropertyValueFactory<Kategorija, String>("naziv"));
         // colName.setCellValueFactory(new PropertyValueFactory<Kategorija,Integer>("nadkategorija"));
         ArrayList<Kategorija> categories = modelKat.getCategories();
         kategorije.clear();
 
-        for(int i=0 ; i<categories.size() ; i++){
+        for (int i = 0; i < categories.size(); i++) {
             kategorije.add(categories.get(i));
         }
         //  tbCategories.setItems(kategorije);
@@ -167,10 +178,10 @@ public class MainController {
         });
 
         colFullName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getIme() + " " + cellData.getValue().getPrezime()));
-        colPhone.setCellValueFactory(new PropertyValueFactory<Proizvod,String>("Telefon"));
-        colDatum_zapsl.setCellValueFactory(new PropertyValueFactory<Proizvod,String>("datum_zaposljavanja"));
-        colJMBG.setCellValueFactory(new PropertyValueFactory<Proizvod,String>("JMBG"));
-        colNazivLok.setCellValueFactory(new PropertyValueFactory<Proizvod,String>("naziv_lokacije"));
+        colPhone.setCellValueFactory(new PropertyValueFactory<Proizvod, String>("Telefon"));
+        colDatum_zapsl.setCellValueFactory(new PropertyValueFactory<Proizvod, String>("datum_zaposljavanja"));
+        colJMBG.setCellValueFactory(new PropertyValueFactory<Proizvod, String>("JMBG"));
+        colNazivLok.setCellValueFactory(new PropertyValueFactory<Proizvod, String>("naziv_lokacije"));
 
         modelEmp = new SkladisteDAO();
         tbEmployees.setItems(modelEmp.getEmployees());
@@ -190,12 +201,12 @@ public class MainController {
             }
         });
 
-        colNazivWarehouse.setCellValueFactory(new PropertyValueFactory<Skladiste,String>("naziv"));
-        colLocationWarehouse.setCellValueFactory(new PropertyValueFactory<Skladiste,String>("naziv_lokacije"));
+        colNazivWarehouse.setCellValueFactory(new PropertyValueFactory<Skladiste, String>("naziv"));
+        colLocationWarehouse.setCellValueFactory(new PropertyValueFactory<Skladiste, String>("naziv_lokacije"));
 
         ObservableList<Skladiste> skladistes = FXCollections.observableArrayList();
 
-        for(int i=0 ; i<skladista.size() ; i++)
+        for (int i = 0; i < skladista.size(); i++)
             skladistes.add(skladista.get(i));
         tbWarehouses.setItems(skladistes);
 
@@ -214,7 +225,7 @@ public class MainController {
             }
         });
 
-        if(spinnerLanguage.getItems().size() != 0){
+        if (spinnerLanguage.getItems().size() != 0) {
             spinnerLanguage.getItems().clear();
         }
 
@@ -226,15 +237,16 @@ public class MainController {
         spinnerLanguage.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-                if(newValue != null) {
-           //         spinnerLanguage.getSelectionModel().select(newValue);
-                    if(newValue.equals("bs")) {
-                      //  spinnerLanguage.getSelectionModel().select("Bosnian");
+                if (newValue != null && oldValue != null) {   // Potrebno i oldValue!=null inace ce me vratiti na prvo skladiste uvijek
+                    //         spinnerLanguage.getSelectionModel().select(newValue);
+                    // System.out.println(oldValue + " " + newValue);
+                    if (newValue.equals("bs")) {
+                        //  spinnerLanguage.getSelectionModel().select("Bosnian");
                         Locale.setDefault(new Locale("bs", "BA"));
                         try {
                             ResourceBundle bundle = ResourceBundle.getBundle("Translation");
                             Stage stage = (Stage) tabPane.getScene().getWindow();
-                            FXMLLoader loader = new FXMLLoader( getClass().getResource("/fxml/main.fxml" ), bundle);
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"), bundle);
                             stage.setScene(new Scene(loader.load()));
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -244,7 +256,7 @@ public class MainController {
                         try {
                             ResourceBundle bundle = ResourceBundle.getBundle("Translation");
                             Stage stage = (Stage) tabPane.getScene().getWindow();
-                            FXMLLoader loader = new FXMLLoader( getClass().getResource("/fxml/main.fxml" ), bundle);
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"), bundle);
                             stage.setScene(new Scene(loader.load()));
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -253,6 +265,91 @@ public class MainController {
                 }
             }
         });
+
+
+        colAvName.setCellValueFactory(new PropertyValueFactory<Proizvod, String>("naziv"));
+        colAvManufacturer.setCellValueFactory(new PropertyValueFactory<Proizvod, String>("proizvodjac"));
+        colAvCategory.setCellValueFactory(new PropertyValueFactory<Proizvod, String>("kategorija"));
+        colAvPrice.setCellValueFactory(new PropertyValueFactory<Proizvod, Integer>("cijena"));
+
+        ObservableList<Proizvod> dostupni = FXCollections.observableArrayList();
+
+        String skl1 = "";
+        if (spinnerSkl.getItems().size() != 0) {
+            skl1 = spinnerSkl.getSelectionModel().getSelectedItem().toString();  // Prije nego sto se obrise spasi zadnji selektovani item
+            spinnerSkl.getItems().clear();
+        }
+
+
+        for (int i = 0; i < skladista.size(); i++) {
+            spinnerSkl.getItems().add(skladista.get(i).getNaziv());
+        }
+
+        if (skl1 != null) spinnerSkl.getSelectionModel().select(skl1);
+
+
+        sk1 = skladista.get(0);
+        dostupni.clear();
+        if (br == 1) {
+            ArrayList<Proizvod> proizvods = model.getProizvodiSkladista(skladista.get(0));
+            for (int j = 0; j < proizvods.size(); j++) {
+                if (proizvods.get(j).getKolicina() > 0) {
+                    dostupni.add(proizvods.get(j));
+                }
+            }
+            spinnerSkl.getSelectionModel().select(skladista.get(0).getNaziv());
+        }
+
+        FilteredList<Proizvod> filteredData = new FilteredList<>(dostupni,b->true);
+
+        fldPretraga.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(proizvod -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                if (proizvod.getNaziv().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }
+
+                return false; // Does not match.
+            });
+        });
+
+        SortedList<Proizvod> sortedData = new SortedList<>(filteredData);
+
+        sortedData.comparatorProperty().bind(tbAvailableProducts.comparatorProperty());
+
+        tbAvailableProducts.setItems(sortedData);
+        //    tbProducts.setItems(obsKolicine);
+
+        spinnerSkl.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
+                dostupni.clear();
+                //    System.out.println(oldValue + " " + newValue);
+                //   System.out.println(newValue);
+                if (newValue != null) {
+                    spinnerSkl.getSelectionModel().select(newValue);
+                    for (int i = 0; i < skladista.size(); i++) {
+                        //   System.out.println(newValue + " " + skladista.get(i).getNaziv());
+                        if (newValue.equals(skladista.get(i).getNaziv())) {
+                            ArrayList<Proizvod> proizvodi = model.getProizvodiSkladista(skladista.get(i));
+                            for (int j = 0; j < proizvodi.size(); j++) {
+                                if (proizvodi.get(j).getKolicina() > 0) {
+                                    dostupni.add(proizvodi.get(j));
+                                }
+                            }
+                            sk1 = skladista.get(i);
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+
     }
 
     public void actAdd(ActionEvent actionEvent) {
@@ -260,7 +357,7 @@ public class MainController {
         Parent root = null;
         try {
             ResourceBundle bundle = ResourceBundle.getBundle("Translation");
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/edit.fxml"),bundle);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/edit.fxml"), bundle);
             EditController editController = new EditController(null);
             loader.setController(editController);
             root = loader.load();
@@ -269,18 +366,18 @@ public class MainController {
             editProductWindow.show();
 
 
-            editProductWindow.setOnHiding( event -> {
+            editProductWindow.setOnHiding(event -> {
                 Proizvod product = editController.getProduct();
                 if (product != null) {
-                //    int kolicina = editController.getKolicina();
-                //    product.setKolicina(kolicina);
-                    model.addProduct(product,sk);
-                  //  model.addProductWarehouse(product,sk,kolicina);
-             //       obsProizvodi.clear();
+                    //    int kolicina = editController.getKolicina();
+                    //    product.setKolicina(kolicina);
+                    model.addProduct(product, sk);
+                    //  model.addProductWarehouse(product,sk,kolicina);
+                    //       obsProizvodi.clear();
                     initialize();
-              //      tbProducts.getItems().clear();
-             //       model = new SkladisteDAO();
-            //        tbProducts.setItems(model.getProducts());
+                    //      tbProducts.getItems().clear();
+                    //       model = new SkladisteDAO();
+                    //        tbProducts.setItems(model.getProducts());
 
                 }
 
@@ -292,9 +389,9 @@ public class MainController {
         }
     }
 
-        public void actEdit(ActionEvent actionEvent) {
+    public void actEdit(ActionEvent actionEvent) {
         ResourceBundle bundle = ResourceBundle.getBundle("Translation");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/edit.fxml"),bundle);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/edit.fxml"), bundle);
         Proizvod proizvod = model.getCurrentProduct();
         EditController editController = new EditController(proizvod);
         Stage editBookWindow = new Stage();
@@ -312,10 +409,10 @@ public class MainController {
 
         editBookWindow.setOnHiding(Event -> {
             Proizvod p = editController.getProduct();
-            if(p != null) {
-           //     int kolicina = editController.getKolicina();
-           //     p.setKolicina(kolicina);
-           //     model.updateCurrentProductWarehouse(p,sk.getId(),kolicina);
+            if (p != null) {
+                //     int kolicina = editController.getKolicina();
+                //     p.setKolicina(kolicina);
+                //     model.updateCurrentProductWarehouse(p,sk.getId(),kolicina);
                 model.updateCurrentProduct(p);
                 obsProizvodi.clear();
                 initialize();
@@ -354,7 +451,7 @@ public class MainController {
         Stage editCategoryWindow = new Stage();
         Parent root = null;
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editCategory.fxml"),bundle);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editCategory.fxml"), bundle);
             EditCategoryController editCategoryController = new EditCategoryController(null);
             loader.setController(editCategoryController);
             root = loader.load();
@@ -363,7 +460,7 @@ public class MainController {
             editCategoryWindow.show();
 
 
-            editCategoryWindow.setOnHiding( event -> {
+            editCategoryWindow.setOnHiding(event -> {
                 Kategorija k = editCategoryController.getKategorija();
                 if (k != null) {
                     model.addCategory(k);
@@ -384,7 +481,7 @@ public class MainController {
         Stage editCategoryWindow = new Stage();
         Parent root = null;
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editCategory.fxml"),bundle);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editCategory.fxml"), bundle);
             Kategorija kat = model.getCurrentCategory();
             EditCategoryController editCategoryController = new EditCategoryController(kat);
             loader.setController(editCategoryController);
@@ -394,7 +491,7 @@ public class MainController {
             editCategoryWindow.show();
 
 
-            editCategoryWindow.setOnHiding( event -> {
+            editCategoryWindow.setOnHiding(event -> {
                 Kategorija k = editCategoryController.getKategorija();
                 if (k != null) {
                     model.updateCurrentCategory(k);
@@ -427,7 +524,7 @@ public class MainController {
 
     public void actAddEmployee(ActionEvent actionEvent) {
         ResourceBundle bundle = ResourceBundle.getBundle("Translation");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editEmployee.fxml"),bundle);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editEmployee.fxml"), bundle);
         EditEmployeeController editController = new EditEmployeeController(null);
         Stage editEmployeeWindow = new Stage();
         loader.setController(editController);
@@ -444,7 +541,7 @@ public class MainController {
 
         editEmployeeWindow.setOnHiding(Event -> {
             Osobe o = editController.getEmployee();
-            if(o != null) {
+            if (o != null) {
                 model.addEmployee(o);
                 initialize();
             }
@@ -456,7 +553,7 @@ public class MainController {
         Stage editCategoryWindow = new Stage();
         Parent root = null;
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editEmployee.fxml"),bundle);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editEmployee.fxml"), bundle);
             Osobe o = model.getCurrentEmployee();
             EditEmployeeController editController = new EditEmployeeController(o);
             loader.setController(editController);
@@ -466,7 +563,7 @@ public class MainController {
             editCategoryWindow.show();
 
 
-            editCategoryWindow.setOnHiding( event -> {
+            editCategoryWindow.setOnHiding(event -> {
                 Osobe employee = editController.getEmployee();
                 if (employee != null) {
                     model.updateCurrentEmployee(employee);
@@ -490,7 +587,7 @@ public class MainController {
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK) {
                 model.deleteEmployee();
-              //  System.out.println("OMG");
+                //  System.out.println("OMG");
                 initialize();
                 tbEmployees.getSelectionModel().selectLast();
             }
@@ -523,7 +620,7 @@ public class MainController {
 
     public void actAddWarehouse(ActionEvent actionEvent) {
         ResourceBundle bundle = ResourceBundle.getBundle("Translation");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editWarehouse.fxml"),bundle);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editWarehouse.fxml"), bundle);
         EditWarehouseController editController = new EditWarehouseController(null);
         Stage editWarehouseWindow = new Stage();
         loader.setController(editController);
@@ -540,7 +637,7 @@ public class MainController {
 
         editWarehouseWindow.setOnHiding(Event -> {
             Skladiste sk = editController.getSkladiste();
-            if(sk != null) {
+            if (sk != null) {
                 try {
                     model.addSkladiste(sk);
                 } catch (SQLException e) {
@@ -553,7 +650,7 @@ public class MainController {
 
     public void actEditWarehouse(ActionEvent actionEvent) {
         ResourceBundle bundle = ResourceBundle.getBundle("Translation");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editWarehouse.fxml"),bundle);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/editWarehouse.fxml"), bundle);
         Skladiste skl = model.getCurrentWarehouse();
         EditWarehouseController editController = new EditWarehouseController(skl);
         Stage editWarehouseWindow = new Stage();
@@ -571,7 +668,7 @@ public class MainController {
 
         editWarehouseWindow.setOnHiding(Event -> {
             Skladiste sk = editController.getSkladiste();
-            if(sk != null) {
+            if (sk != null) {
                 try {
                     model.updateSkladiste(sk);
                 } catch (SQLException e) {
