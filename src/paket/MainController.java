@@ -290,15 +290,16 @@ public class MainController {
 
         sk1 = skladista.get(0);
         dostupni.clear();
-        if (br == 1) {
-            ArrayList<Proizvod> proizvods = model.getProizvodiSkladista(skladista.get(0));
+   //     if (br == 1) {
+            ArrayList<Proizvod> proizvods = model.getProizvodiSkladista(sk);
             for (int j = 0; j < proizvods.size(); j++) {
                 if (proizvods.get(j).getKolicina() > 0) {
                     dostupni.add(proizvods.get(j));
                 }
             }
+            if(br == 1)
             spinnerSkl.getSelectionModel().select(skladista.get(0).getNaziv());
-        }
+     //   }
 
         FilteredList<Proizvod> filteredData = new FilteredList<>(dostupni,b->true);
 
@@ -358,7 +359,7 @@ public class MainController {
         try {
             ResourceBundle bundle = ResourceBundle.getBundle("Translation");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/edit.fxml"), bundle);
-            EditController editController = new EditController(null);
+            EditController editController = new EditController(null,sk);
             loader.setController(editController);
             root = loader.load();
             editProductWindow.setScene(new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
@@ -393,7 +394,7 @@ public class MainController {
         ResourceBundle bundle = ResourceBundle.getBundle("Translation");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/edit.fxml"), bundle);
         Proizvod proizvod = model.getCurrentProduct();
-        EditController editController = new EditController(proizvod);
+        EditController editController = new EditController(proizvod,sk);
         Stage editBookWindow = new Stage();
         loader.setController(editController);
         Parent root = null;

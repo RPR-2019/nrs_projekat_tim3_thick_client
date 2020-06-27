@@ -173,10 +173,8 @@ public class EditEmployeeController {
 
     }
 
-
-
     public void actOk(ActionEvent actionEvent) {
-        if(!(fldFirstName.getText().isEmpty()) && !(fldLastName.getText().isEmpty()) && !(fldPhone.getText().isEmpty()) && (EditController.DaLiJeBroj(fldJMBG.getText()))
+        if(!(fldFirstName.getText().isEmpty()) && !(fldLastName.getText().isEmpty()) && !(fldPhone.getText().isEmpty()) && (EditController.DaLiJeBroj(fldJMBG.getText())) && fldJMBG.getText().length() == 13
         && validacijaEmaila(fldEmail.getText()) && checkPassword(fldPassword.getText())) {
             employee = new Osobe(fldFirstName.getText(), fldLastName.getText(), fldPhone.getText(), LocalDate.parse(fldDate.getText()),
                     fldJMBG.getText(), fldLocation.getText(), fldPassword.getText(), fldEmail.getText());

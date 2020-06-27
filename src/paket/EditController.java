@@ -24,6 +24,7 @@ public class EditController {
     public Button btnOk;
     public int kolicina = 0;
     private SkladisteDAO model;
+    private Skladiste sk;
 
     public static boolean DaLiJeBroj(String str){
         String regex = "[0-9]+";
@@ -65,8 +66,8 @@ public class EditController {
         return false;
     }
 
-    public boolean ProvjeraDaLiVecPostojiProizvod(String str){
-        ObservableList<Proizvod> products = model.getProducts();
+    public boolean ProvjeraDaLiVecPostojiProizvod(String str,Skladiste sk){
+        ArrayList<Proizvod> products = model.getProizvodiSkladista(sk);
 
         for(Proizvod p : products){
             if(p.getNaziv().equals(str)){
@@ -76,8 +77,9 @@ public class EditController {
         return false;
     }
 
-    public EditController(Proizvod product){
+    public EditController(Proizvod product,Skladiste sk){
         this.product = product;
+        this.sk = sk;
     }
 
     public void initialize(){
@@ -116,7 +118,7 @@ public class EditController {
         }
 
         fldNaziv.textProperty().addListener((obs, oldIme, newIme) -> {
-            if (!newIme.isEmpty() && !ProvjeraDaLiVecPostojiProizvod(newIme) && newIme.length() > 3) {
+            if (!newIme.isEmpty() && !ProvjeraDaLiVecPostojiProizvod(newIme,sk) && newIme.length() > 3) {
                 fldNaziv.getStyleClass().removeAll("poljeNijeIspravno");
                 fldNaziv.getStyleClass().add("poljeIspravno");
             } else {
@@ -185,7 +187,7 @@ public class EditController {
     }
 
     public void actOk(ActionEvent actionEvent) {
-        if(fldNaziv.getText().length() != 0  && (product == null  && !ProvjeraDaLiVecPostojiProizvod(fldNaziv.getText()) || (product != null )) && DaLiJeBroj(fldKolicina.getText()) && DaLiJeBroj(fldCijena.getText()) && ispravanDobavljac(fldDobavljac.getText()) && IspravnaKategorija(fldKategorija.getText()) && IspravanProizvodjac(fldProizvodjac.getText())) {
+        if(fldNaziv.getText().length() != 0  && (product == null  && !ProvjeraDaLiVecPostojiProizvod(fldNaziv.getText(),sk) || (product != null )) && DaLiJeBroj(fldKolicina.getText()) && DaLiJeBroj(fldCijena.getText()) && ispravanDobavljac(fldDobavljac.getText()) && IspravnaKategorija(fldKategorija.getText()) && IspravanProizvodjac(fldProizvodjac.getText())) {
             if (product == null) {
                 product = new Proizvod(fldNaziv.getText(), fldProizvodjac.getText(), fldKategorija.getText(), Integer.parseInt(fldCijena.getText()));
                 kolicina = Integer.parseInt(fldKolicina.getText());

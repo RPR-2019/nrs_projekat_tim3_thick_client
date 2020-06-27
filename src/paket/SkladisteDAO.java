@@ -46,7 +46,7 @@ public class SkladisteDAO {
     public SkladisteDAO() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/skladista", "root", "root");
+            connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/skladista", "root", "");
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }

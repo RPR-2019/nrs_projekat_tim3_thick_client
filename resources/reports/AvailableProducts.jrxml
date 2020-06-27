@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.8.0.final using JasperReports Library version 6.8.0-2ed8dfabb690ff337a5797129f2cd92902b0c87b  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="proizvodiii" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7a5c9b49-9dc5-422a-ac69-e92cf61ef530">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AvailableProducts" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7a5c9b49-9dc5-422a-ac69-e92cf61ef530">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataMySql.xml"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false"/>
@@ -16,7 +16,7 @@
 	<queryString language="SQL">
 		<![CDATA[SELECT p.id,p.naziv,pro.naziv,k.naziv,p.cijena,p1.kolicina,sk.naziv
 from proizvodi p,proizvodi_skladista p1,skladista sk,proizvodjaci pro,kategorije k
-where p1.proizvod_id = p.id and sk.id = p1.skladiste_id AND p.proizvodjac = pro.id AND p.kategorija = k.id]]>
+where p1.proizvod_id = p.id and sk.id = p1.skladiste_id AND p.proizvodjac = pro.id AND p.kategorija = k.id AND p1.kolicina > 0]]>
 	</queryString>
 	<field name="id" class="java.lang.Long">
 		<property name="com.jaspersoft.studio.field.label" value="id"/>
@@ -54,19 +54,19 @@ where p1.proizvod_id = p.id and sk.id = p1.skladiste_id AND p.proizvodjac = pro.
 			<frame>
 				<reportElement mode="Opaque" x="0" y="0" width="721" height="66" backcolor="#000000" uuid="d8d9e644-3a32-491d-97cb-a277aff17133"/>
 				<staticText>
-					<reportElement style="Title" x="0" y="0" width="370" height="66" uuid="27d8f6ee-f0a9-44f6-a160-1763c3b00f30"/>
+					<reportElement style="Title" x="0" y="0" width="500" height="66" uuid="27d8f6ee-f0a9-44f6-a160-1763c3b00f30"/>
 					<box topPadding="4" leftPadding="4" bottomPadding="4" rightPadding="4"/>
 					<textElement verticalAlignment="Bottom">
 						<font isBold="false"/>
 					</textElement>
-					<text><![CDATA[Proizvodi]]></text>
+					<text><![CDATA[Available products]]></text>
 				</staticText>
 				<staticText>
 					<reportElement style="SubTitle" x="370" y="37" width="316" height="29" uuid="cfa21334-0634-4605-9ea7-aca4981f67e4"/>
 					<textElement textAlignment="Right">
 						<font size="22" isBold="false"/>
 					</textElement>
-					<text><![CDATA[proizvodi]]></text>
+					<text><![CDATA[]]></text>
 				</staticText>
 			</frame>
 			<frame>
@@ -87,8 +87,8 @@ where p1.proizvod_id = p.id and sk.id = p1.skladiste_id AND p.proizvodjac = pro.
 	<columnHeader>
 		<band height="18" splitType="Stretch">
 			<staticText>
-				<reportElement style="Column header" x="0" y="0" width="113" height="18" forecolor="#000000" uuid="bf7981eb-ebc9-4ec7-890d-b4ad9832633b">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9f58e83f-3541-4fb4-9055-075febd55ffa"/>
+				<reportElement style="Column header" x="0" y="0" width="113" height="18" forecolor="#000000" uuid="849c9b4a-f095-48be-9042-836caa86c9a5">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="29d6b818-3c00-4fc0-b0e5-6e3087d1819c"/>
 				</reportElement>
 				<textElement>
 					<font isBold="false"/>
@@ -96,8 +96,8 @@ where p1.proizvod_id = p.id and sk.id = p1.skladiste_id AND p.proizvodjac = pro.
 				<text><![CDATA[id]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="113" y="0" width="113" height="18" forecolor="#000000" uuid="919b415e-4c8f-49a5-8ce3-c04bf639471b">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8aaeec80-e2a4-4f11-a84e-c2ac50d7f499"/>
+				<reportElement style="Column header" x="113" y="0" width="113" height="18" forecolor="#000000" uuid="96d4ba76-81eb-4d01-a634-841d4fc9e1ae">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="33bc65ee-15cd-477f-a858-7e3d417a9db2"/>
 				</reportElement>
 				<textElement>
 					<font isBold="false"/>
@@ -105,26 +105,26 @@ where p1.proizvod_id = p.id and sk.id = p1.skladiste_id AND p.proizvodjac = pro.
 				<text><![CDATA[naziv]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="226" y="0" width="113" height="18" forecolor="#000000" uuid="6757230f-df5c-4682-98aa-cd7b8d13e6f6">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="adbc79a2-fd66-4036-a2b0-3a29bc87b2f0"/>
+				<reportElement style="Column header" x="226" y="0" width="113" height="18" forecolor="#000000" uuid="3708bcdb-e09d-482a-a74e-797dc6e04699">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7a443437-eaa4-4009-97fe-b7574b4098fc"/>
 				</reportElement>
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
-				<text><![CDATA[proizvodjac]]></text>
+				<text><![CDATA[COLUMN_3]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="339" y="0" width="113" height="18" forecolor="#000000" uuid="a171c69e-e06c-473c-9216-35c56f1aba75">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5577e13e-829e-4d4c-b8bf-dea58066b398"/>
+				<reportElement style="Column header" x="339" y="0" width="113" height="18" forecolor="#000000" uuid="ef113b32-81b3-4fc9-87f9-540c8d5c2576">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="16e2b28a-5b50-4d8a-a8e7-339dc0c0dc9e"/>
 				</reportElement>
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
-				<text><![CDATA[kategorija]]></text>
+				<text><![CDATA[COLUMN_4]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="452" y="0" width="113" height="18" forecolor="#000000" uuid="2d204696-b081-4172-99bb-991b24930df8">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a93d4ac4-91ed-4390-8e07-93ab3b7b0ff8"/>
+				<reportElement style="Column header" x="452" y="0" width="113" height="18" forecolor="#000000" uuid="599398c6-aa2c-463d-8380-a58c2e28925b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="23beb28a-9781-42c4-a2b6-25f502db4979"/>
 				</reportElement>
 				<textElement>
 					<font isBold="false"/>
@@ -132,8 +132,8 @@ where p1.proizvod_id = p.id and sk.id = p1.skladiste_id AND p.proizvodjac = pro.
 				<text><![CDATA[cijena]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="565" y="0" width="113" height="18" forecolor="#000000" uuid="26b7e412-c8bd-409d-8ef8-86b2008d8d01">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b999f68d-5ec3-41f5-bab1-6f1319730e15"/>
+				<reportElement style="Column header" x="565" y="0" width="113" height="18" forecolor="#000000" uuid="00adee96-752d-4d0c-86fa-39a50a8da45f">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="269435a0-bdc8-4323-a529-2e29641eb71e"/>
 				</reportElement>
 				<textElement>
 					<font isBold="false"/>
@@ -141,13 +141,13 @@ where p1.proizvod_id = p.id and sk.id = p1.skladiste_id AND p.proizvodjac = pro.
 				<text><![CDATA[kolicina]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="678" y="0" width="113" height="18" forecolor="#000000" uuid="564e2509-2b2b-4ee3-80bd-b475688fddb7">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1ac30feb-01d2-4fba-832d-2d967dcff48c"/>
+				<reportElement style="Column header" x="678" y="0" width="113" height="18" forecolor="#000000" uuid="7b024495-ae85-4534-b441-8458c028c8cc">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6a8d0f79-407b-4a95-ba2a-c9e2691e62b5"/>
 				</reportElement>
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
-				<text><![CDATA[skladiste]]></text>
+				<text><![CDATA[Skladiste]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -156,8 +156,8 @@ where p1.proizvod_id = p.id and sk.id = p1.skladiste_id AND p.proizvodjac = pro.
 			<frame>
 				<reportElement style="Row" mode="Opaque" x="0" y="0" width="797" height="18" uuid="34a2ae4b-4055-476b-8676-d499f6af510b"/>
 				<textField textAdjust="StretchHeight">
-					<reportElement style="Detail" positionType="Float" x="0" y="0" width="113" height="18" uuid="1fd96f08-c0a1-4ced-b237-29870d7164a3">
-						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9f58e83f-3541-4fb4-9055-075febd55ffa"/>
+					<reportElement style="Detail" positionType="Float" x="0" y="0" width="113" height="18" uuid="e56e7343-3498-4df6-b2e4-07736ea40cc5">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="29d6b818-3c00-4fc0-b0e5-6e3087d1819c"/>
 					</reportElement>
 					<textElement>
 						<font size="14"/>
@@ -165,8 +165,8 @@ where p1.proizvod_id = p.id and sk.id = p1.skladiste_id AND p.proizvodjac = pro.
 					<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
 				</textField>
 				<textField textAdjust="StretchHeight">
-					<reportElement style="Detail" positionType="Float" x="113" y="0" width="113" height="18" uuid="92c054bd-1e7e-4e45-b79c-c6fb9d790f9a">
-						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8aaeec80-e2a4-4f11-a84e-c2ac50d7f499"/>
+					<reportElement style="Detail" positionType="Float" x="113" y="0" width="113" height="18" uuid="90244947-90a3-4fce-ab5e-58fb4968284e">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="33bc65ee-15cd-477f-a858-7e3d417a9db2"/>
 					</reportElement>
 					<textElement>
 						<font size="14"/>
@@ -174,8 +174,8 @@ where p1.proizvod_id = p.id and sk.id = p1.skladiste_id AND p.proizvodjac = pro.
 					<textFieldExpression><![CDATA[$F{naziv}]]></textFieldExpression>
 				</textField>
 				<textField textAdjust="StretchHeight">
-					<reportElement style="Detail" positionType="Float" x="226" y="0" width="113" height="18" uuid="b91e1871-a991-4cba-a3b0-642ebbf40eed">
-						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="adbc79a2-fd66-4036-a2b0-3a29bc87b2f0"/>
+					<reportElement style="Detail" positionType="Float" x="226" y="0" width="113" height="18" uuid="c4f869c3-fb0f-4f50-adc1-9c5cd4571f38">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7a443437-eaa4-4009-97fe-b7574b4098fc"/>
 					</reportElement>
 					<textElement>
 						<font size="14"/>
@@ -183,8 +183,8 @@ where p1.proizvod_id = p.id and sk.id = p1.skladiste_id AND p.proizvodjac = pro.
 					<textFieldExpression><![CDATA[$F{COLUMN_3}]]></textFieldExpression>
 				</textField>
 				<textField textAdjust="StretchHeight">
-					<reportElement style="Detail" positionType="Float" x="339" y="0" width="113" height="18" uuid="4afbd8ef-fa86-46d1-b516-5a359396deea">
-						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5577e13e-829e-4d4c-b8bf-dea58066b398"/>
+					<reportElement style="Detail" positionType="Float" x="339" y="0" width="113" height="18" uuid="a979f5c8-f4fe-4cfc-9425-9d284eb5cc18">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="16e2b28a-5b50-4d8a-a8e7-339dc0c0dc9e"/>
 					</reportElement>
 					<textElement>
 						<font size="14"/>
@@ -192,8 +192,8 @@ where p1.proizvod_id = p.id and sk.id = p1.skladiste_id AND p.proizvodjac = pro.
 					<textFieldExpression><![CDATA[$F{COLUMN_4}]]></textFieldExpression>
 				</textField>
 				<textField textAdjust="StretchHeight">
-					<reportElement style="Detail" positionType="Float" x="452" y="0" width="113" height="18" uuid="73b59cd2-df9a-420b-949e-5c7b436ba58e">
-						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a93d4ac4-91ed-4390-8e07-93ab3b7b0ff8"/>
+					<reportElement style="Detail" positionType="Float" x="452" y="0" width="113" height="18" uuid="eaa6b041-3f3d-48aa-9bde-dbe6ee1cbd68">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="23beb28a-9781-42c4-a2b6-25f502db4979"/>
 					</reportElement>
 					<textElement>
 						<font size="14"/>
@@ -201,8 +201,8 @@ where p1.proizvod_id = p.id and sk.id = p1.skladiste_id AND p.proizvodjac = pro.
 					<textFieldExpression><![CDATA[$F{cijena}]]></textFieldExpression>
 				</textField>
 				<textField textAdjust="StretchHeight">
-					<reportElement style="Detail" positionType="Float" x="565" y="0" width="113" height="18" uuid="603b6226-05a5-493f-8a75-4449cc03a9ad">
-						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b999f68d-5ec3-41f5-bab1-6f1319730e15"/>
+					<reportElement style="Detail" positionType="Float" x="565" y="0" width="113" height="18" uuid="682afec0-fdf2-449f-a733-94b17ed4d1df">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="269435a0-bdc8-4323-a529-2e29641eb71e"/>
 					</reportElement>
 					<textElement>
 						<font size="14"/>
@@ -210,8 +210,8 @@ where p1.proizvod_id = p.id and sk.id = p1.skladiste_id AND p.proizvodjac = pro.
 					<textFieldExpression><![CDATA[$F{kolicina}]]></textFieldExpression>
 				</textField>
 				<textField textAdjust="StretchHeight">
-					<reportElement style="Detail" positionType="Float" x="678" y="0" width="113" height="18" uuid="9dbeb2da-0a97-49a4-bb1b-ffdf2f6c2ff8">
-						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1ac30feb-01d2-4fba-832d-2d967dcff48c"/>
+					<reportElement style="Detail" positionType="Float" x="678" y="0" width="113" height="18" uuid="9c6b55e9-8404-405c-99c7-002ba680c552">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6a8d0f79-407b-4a95-ba2a-c9e2691e62b5"/>
 					</reportElement>
 					<textElement>
 						<font size="14"/>
