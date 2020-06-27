@@ -82,7 +82,7 @@ public class EditCategoryController {
     }
 
     public void actOk(ActionEvent actionEvent) {
-        if(fldNaziv.getText().length() !=0 && (provjeriNadKategoriju(fldNadKategorija.getText()) || fldNadKategorija.getText().length() == 0) && provjeraDaLiPostojiKat(fldNaziv.getText())) {
+        if(fldNaziv.getText().length() !=0 && (provjeriNadKategoriju(fldNadKategorija.getText()) || fldNadKategorija.getText().length() == 0) && ((provjeraDaLiPostojiKat(fldNaziv.getText()) && kategorija == null) || kategorija != null)){
             kategorija = new Kategorija(fldNaziv.getText(), fldNadKategorija.getText());
          //   System.out.println(kategorija.getNaziv() + "  " + kategorija.getNadKategorija());
             Stage stage = (Stage) btnOk.getScene().getWindow();
