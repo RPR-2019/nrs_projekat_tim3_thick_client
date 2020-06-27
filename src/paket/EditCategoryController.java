@@ -1,5 +1,7 @@
 package paket;
 
+import javafx.beans.Observable;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -20,6 +22,15 @@ public class EditCategoryController {
         this.kategorija = kategorija;
     }
 
+    public boolean provjeraDaLiPostojiKat(String str){
+        ArrayList<Kategorija> categories = model.getCategories();
+
+        for(int i=0 ; i<categories.size() ; i++){
+            if(categories.get(i).getNaziv().equals(str)) return false;
+        }
+        return true;
+    }
+
     @FXML
     public void initialize(){
         model = new SkladisteDAO();
@@ -35,7 +46,7 @@ public class EditCategoryController {
         }
 
         fldNaziv.textProperty().addListener((obs, oldIme, newIme) -> {               // Kategorija koja se unosi mora biti jednaka nekoj iz baze
-            if (!newIme.isEmpty()) {
+            if (!newIme.isEmpty() && provjeraDaLiPostojiKat(newIme)) {
                 fldNaziv.getStyleClass().removeAll("poljeNijeIspravno");
                 fldNaziv.getStyleClass().add("poljeIspravno");
             } else {
@@ -71,7 +82,7 @@ public class EditCategoryController {
     }
 
     public void actOk(ActionEvent actionEvent) {
-        if(fldNaziv.getText().length() !=0 && (provjeriNadKategoriju(fldNadKategorija.getText()) || fldNadKategorija.getText().length() == 0)) {
+        if(fldNaziv.getText().length() !=0 && (provjeriNadKategoriju(fldNadKategorija.getText()) || fldNadKategorija.getText().length() == 0) && provjeraDaLiPostojiKat(fldNaziv.getText())) {
             kategorija = new Kategorija(fldNaziv.getText(), fldNadKategorija.getText());
          //   System.out.println(kategorija.getNaziv() + "  " + kategorija.getNadKategorija());
             Stage stage = (Stage) btnOk.getScene().getWindow();
