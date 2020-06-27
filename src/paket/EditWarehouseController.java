@@ -64,7 +64,7 @@ public class EditWarehouseController {
     }
 
     public void actOk(ActionEvent actionEvent) {
-        if(fldNaziv.getText().length() > 3 && fldLokacija.getText().length() > 3 && provjeraDaLiPostojiSkl(fldNaziv.getText())) {
+        if(fldNaziv.getText().length() > 3 && fldLokacija.getText().length() > 3 && (provjeraDaLiPostojiSkl(fldNaziv.getText()) && skladiste == null) || skladiste != null) {
             skladiste = new Skladiste(fldNaziv.getText(), fldLokacija.getText());
             Stage stage = (Stage) btnOk.getScene().getWindow();
             stage.close();
