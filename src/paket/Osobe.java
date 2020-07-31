@@ -2,10 +2,13 @@ package paket;
 
 import java.time.LocalDate;
 
+
+
 public class Osobe {
     private int id;
   //  private Long JMBG;
     private String ime,prezime,telefon,naziv_lokacije,email,password,JMBG;
+    public enum Uloga {ADMIN,UPOSLENIK,KUPAC};
     private LocalDate datum_zaposljavanja;
 
     public Osobe() {

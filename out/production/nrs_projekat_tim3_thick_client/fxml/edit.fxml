@@ -56,16 +56,6 @@
                 <Insets right="30.0" />
             </GridPane.margin>
         </TextField>
-        <TextField fx:id="fldProizvodjac" GridPane.columnIndex="1" GridPane.rowIndex="1">
-            <GridPane.margin>
-                <Insets right="30.0" />
-            </GridPane.margin>
-        </TextField>
-        <TextField fx:id="fldKategorija" GridPane.columnIndex="1" GridPane.rowIndex="2">
-            <GridPane.margin>
-                <Insets right="30.0" />
-            </GridPane.margin>
-        </TextField>
       <TextField fx:id="fldCijena" prefHeight="25.0" prefWidth="167.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
         <GridPane.margin>
             <Insets right="30.0" />
@@ -85,10 +75,8 @@
             <Insets left="6.0" />
          </padding>
       </Label>
-      <TextField fx:id="fldDobavljac" GridPane.columnIndex="1" GridPane.rowIndex="5">
-         <GridPane.margin>
-            <Insets right="30.0" />
-         </GridPane.margin>
-      </TextField>
+      <ChoiceBox fx:id="choiceProizvodjac" prefHeight="25.0" prefWidth="179.0" GridPane.columnIndex="1"  GridPane.rowIndex="1" />
+      <ChoiceBox fx:id="choiceKategorija" prefHeight="25.0" prefWidth="179.0" GridPane.columnIndex="1"  GridPane.rowIndex="2" />
+      <ChoiceBox fx:id="choiceDobavljac" prefHeight="25.0" prefWidth="179.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
     </children>
 </GridPane>

@@ -47,10 +47,6 @@
                 <Insets right="50.0" />
             </GridPane.margin>
         </TextField>
-        <TextField fx:id="fldNadKategorija" prefHeight="25.0" prefWidth="186.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-            <GridPane.margin>
-                <Insets right="50.0" />
-            </GridPane.margin>
-        </TextField>
+      <ChoiceBox fx:id="choiceNadKat" prefHeight="25.0" prefWidth="178.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
     </children>
 </GridPane>

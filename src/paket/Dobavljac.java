@@ -1,10 +1,15 @@
 package paket;
 
-public class Proizvodjac {
+public class Dobavljac {
     private int id;
     private String naziv;
 
-    public Proizvodjac() {
+    public Dobavljac() {
+    }
+
+    public Dobavljac(int id, String naziv) {
+        this.id = id;
+        this.naziv = naziv;
     }
 
     public int getId() {
@@ -21,15 +26,5 @@ public class Proizvodjac {
 
     public void setNaziv(String naziv) {
         this.naziv = naziv;
-    }
-
-    public Proizvodjac(int id, String naziv) {
-        this.id = id;
-        this.naziv = naziv;
-    }
-
-    @Override
-    public String toString() {
-        return naziv;
     }
 }

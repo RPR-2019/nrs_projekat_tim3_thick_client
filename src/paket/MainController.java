@@ -1,6 +1,5 @@
 package paket;
 
-import javafx.beans.Observable;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -9,8 +8,6 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -26,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Filter;
 
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
@@ -372,7 +368,7 @@ public class MainController {
                 if (product != null) {
                     //    int kolicina = editController.getKolicina();
                     //    product.setKolicina(kolicina);
-                    model.addProduct(product, sk);
+                    model.addProduct(product, sk,product.getDobavljac());
                     //  model.addProductWarehouse(product,sk,kolicina);
                     //       obsProizvodi.clear();
                     initialize();
@@ -414,7 +410,7 @@ public class MainController {
                 //     int kolicina = editController.getKolicina();
                 //     p.setKolicina(kolicina);
                 //     model.updateCurrentProductWarehouse(p,sk.getId(),kolicina);
-                model.updateCurrentProduct(p);
+                model.updateCurrentProduct(p,sk,p.getDobavljac());
                 obsProizvodi.clear();
                 initialize();
             }
@@ -430,8 +426,8 @@ public class MainController {
             alert.setContentText("Are you sure you want to delete this product?");
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK) {
-                model.deleteFromWarehouse(model.getCurrentProduct());
-                model.deleteProduct();
+             //   model.deleteFromWarehouse(model.getCurrentProduct());
+                model.deleteProduct(model.getCurrentProduct(),sk);
                 obsProizvodi.clear();
                 initialize();
                 tbProducts.getSelectionModel().selectLast();
@@ -515,7 +511,7 @@ public class MainController {
             alert.setContentText("Are you sure you want to delete this category?");
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK) {
-                model.deleteCategory();
+                model.deleteCategory(model.getCurrentCategory());
                 System.out.println("OMG");
                 initialize();
                 tbCategories.getSelectionModel().selectLast();
@@ -587,7 +583,7 @@ public class MainController {
             alert.setContentText("Are you sure you want to delete this employee?");
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK) {
-                model.deleteEmployee();
+                model.deleteEmployee(model.getCurrentEmployee());
                 //  System.out.println("OMG");
                 initialize();
                 tbEmployees.getSelectionModel().selectLast();
@@ -688,7 +684,7 @@ public class MainController {
             alert.setContentText("Are you sure you want to delete this warehouse?");
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK) {
-                model.deleteWarehouse();
+                model.deleteWarehouse(model.getCurrentWarehouse());
                 //  System.out.println("OMG");
                 initialize();
                 tbWarehouses.getSelectionModel().selectLast();

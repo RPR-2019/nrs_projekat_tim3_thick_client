@@ -1,11 +1,12 @@
 package paket;
 
-import javafx.beans.Observable;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -13,40 +14,46 @@ import java.util.ArrayList;
 
 public class EditCategoryController {
     public TextField fldNaziv;
-    public TextField fldNadKategorija;
     public Button btnOk;
     public Kategorija kategorija = null;
     public SkladisteDAO model;
+    public ChoiceBox<String> choiceNadKat;
+    private ObservableList<String> obskategorije = FXCollections.observableArrayList();
 
     public EditCategoryController(Kategorija kategorija){
         this.kategorija = kategorija;
     }
 
-    public boolean provjeraDaLiPostojiKat(String str){
+    public ObservableList<String> DajKategorije(){
         ArrayList<Kategorija> categories = model.getCategories();
 
         for(int i=0 ; i<categories.size() ; i++){
-            if(categories.get(i).getNaziv().equals(str)) return false;
+            obskategorije.add(categories.get(i).getNaziv());
         }
-        return true;
+
+        return obskategorije;
     }
+
+
 
     @FXML
     public void initialize(){
         model = new SkladisteDAO();
+        choiceNadKat.setItems(DajKategorije());
+      //  choiceNadKat.getItems().add(0,null);
+
         if(kategorija == null){
+            choiceNadKat.setValue("");
             fldNaziv.getStyleClass().add("poljeNijeIspravno");
         }
         else {
             fldNaziv.setText(kategorija.getNaziv());
-            fldNadKategorija.setText(kategorija.getNadKategorija());
-
+            choiceNadKat.setValue(kategorija.getNadKategorija());
             fldNaziv.getStyleClass().add("poljeIspravno");
-            fldNadKategorija.getStyleClass().add("poljeIspravno");
         }
 
         fldNaziv.textProperty().addListener((obs, oldIme, newIme) -> {               // Kategorija koja se unosi mora biti jednaka nekoj iz baze
-            if (!newIme.isEmpty() && provjeraDaLiPostojiKat(newIme)) {
+            if (!newIme.isEmpty()) {
                 fldNaziv.getStyleClass().removeAll("poljeNijeIspravno");
                 fldNaziv.getStyleClass().add("poljeIspravno");
             } else {
@@ -55,36 +62,28 @@ public class EditCategoryController {
             }
         });
 
-        fldNadKategorija.textProperty().addListener((obs, oldIme, newIme) -> {               // Kategorija koja se unosi mora biti jednaka nekoj iz baze
-            if (!newIme.isEmpty() && provjeriNadKategoriju(newIme)) {            // Nadkategorija mora biti jednaka nekoj kategoriji
-                fldNadKategorija.getStyleClass().removeAll("poljeNijeIspravno");
-                fldNadKategorija.getStyleClass().add("poljeIspravno");
-            } else {
-                fldNadKategorija.getStyleClass().removeAll("poljeIspravno");
-                fldNadKategorija.getStyleClass().add("poljeNijeIspravno");
-            }
-        });
-
     }
 
-    public boolean provjeriNadKategoriju(String str){
+    public boolean provjeraKat(String str){
         ArrayList<Kategorija> categories = model.getCategories();
-        boolean validno = false;
+        boolean postoji = false;
 
         for(int i=0 ; i<categories.size() ; i++){
             if(categories.get(i).getNaziv().equals(str)){
-                validno = true;
+                postoji = true;
                 break;
             }
         }
 
-        return validno;
+        return postoji;
     }
 
     public void actOk(ActionEvent actionEvent) {
-        if(fldNaziv.getText().length() !=0 && (provjeriNadKategoriju(fldNadKategorija.getText()) || fldNadKategorija.getText().length() == 0) && ((provjeraDaLiPostojiKat(fldNaziv.getText()) && kategorija == null) || kategorija != null)){
-            kategorija = new Kategorija(fldNaziv.getText(), fldNadKategorija.getText());
-         //   System.out.println(kategorija.getNaziv() + "  " + kategorija.getNadKategorija());
+        if(fldNaziv.getText().length() !=0){
+            if(kategorija == null) kategorija = new Kategorija();
+            kategorija.setNaziv(fldNaziv.getText());
+            kategorija.setNadKategorija(choiceNadKat.getValue().toString());
+            //   System.out.println(kategorija.getNaziv() + "  " + kategorija.getNadKategorija());
             Stage stage = (Stage) btnOk.getScene().getWindow();
             stage.close();
         }

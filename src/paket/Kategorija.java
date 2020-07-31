@@ -3,6 +3,7 @@ package paket;
 public class Kategorija {
     private int id;
     private String naziv,nadKategorija = null;
+  //  private Kategorija nadKategorija = null;
     int nad_k;
 
     public Kategorija() {
@@ -56,4 +57,10 @@ public class Kategorija {
     public void setNad_k(int nad_k) {
         this.nad_k = nad_k;
     }
+
+    @Override
+    public String toString() {
+        return naziv;
+    }
+
 }

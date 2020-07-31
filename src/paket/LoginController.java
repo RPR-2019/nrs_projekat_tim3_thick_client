@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
+import static javafx.scene.control.PopupControl.USE_COMPUTED_SIZE;
 
 public class LoginController {
 
@@ -37,7 +37,7 @@ public class LoginController {
     public void actLogin(ActionEvent actionEvent) {
         String email = fldUsername.getText();
         String pass = fldPassword.getText();
-
+     //  Administrator admin = skladisteDAO.login(email,pass);
         ArrayList<Administrator> admini = skladisteDAO.getAdmins();
 
         for (int i = 0; i < admini.size(); i++) {
@@ -46,13 +46,13 @@ public class LoginController {
                 fldUsername.getStyleClass().add("poljeIspravno");
                 fldPassword.getStyleClass().removeAll("poljeNijeIspravno");
                 fldPassword.getStyleClass().add("poljeIspravno");
-             //   SkladisteDAO skladisteDAO = SkladisteDAO.getInstance();
+                //   SkladisteDAO skladisteDAO = SkladisteDAO.getInstance();
                 Locale.setDefault(new Locale("bs", "BA"));
                 ResourceBundle bundle = ResourceBundle.getBundle("Translation");
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"),bundle);
-             //   MainController mainController = new MainController(skladisteDAO);
+                //   MainController mainController = new MainController(skladisteDAO);
                 Stage stage = new Stage();
-          //      loader.setController(mainController);
+                //      loader.setController(mainController);
                 Parent root = null;
                 try {
                     root = loader.load();
