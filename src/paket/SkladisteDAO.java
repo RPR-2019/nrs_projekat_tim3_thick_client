@@ -830,20 +830,6 @@ public class SkladisteDAO {
         } catch (MalformedURLException e1) {
             e1.printStackTrace();
         }
-        HttpURLConnection con = null;
-        try {
-            con = (HttpURLConnection)url.openConnection();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        try {
-            con.setRequestMethod("POST");
-        } catch (ProtocolException e1) {
-            e1.printStackTrace();
-        }
-        con.setRequestProperty("Content-Type", "application/json");
-        con.setRequestProperty("Accept", "application/json");
-        con.setDoOutput(true);
 
         //max++;
         String json = "{ \"ime\": \""+e.getIme()+"\"," +
@@ -854,99 +840,23 @@ public class SkladisteDAO {
     //              "\"prezime\":  \""+e.getPrezime()+"\",\"telefon\":  \""+e.getTelefon()+"\",\"datum_zaposljavanja\":  \""+e.getDatum_zaposljavanja()+"\",\"jmbg\":  \""+e.getJMBG()+"\",\"lokacija\":  \""+e.getNaziv_lokacije()+"\",\"email\":  \""+e.getEmail()+"\",\"password\": \""+e.getPassword()+"\"}";
 
 
-        System.out.println(json);
-
-        try(OutputStream os = con.getOutputStream()) {
-            byte[] input = json.getBytes("utf-8");
-            os.write(input, 0, input.length);
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-
-        try(BufferedReader br = new BufferedReader(
-                new InputStreamReader(con.getInputStream(), "utf-8"))) {
-            StringBuilder response = new StringBuilder();
-            String responseLine = null;
-            while ((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
-            }
-            System.out.println(response.toString());
+            addUsingHttp(json,url);
             JSONArray jsonArray = new JSONArray(dajJson("https://nrs-backend.herokuapp.com/people"));
             JSONObject jo = jsonArray.getJSONObject(jsonArray.length()-1);
             int id = jo.getInt("id");
             e.setId(id);
-            AddKorisnickiRacun(e);
-        } catch (UnsupportedEncodingException e1) {
-            e1.printStackTrace();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
 
-    }
-
-    public int MaxIdKorisnickiRacun(){
-        JSONArray jsonArray = new JSONArray(dajJson("https://nrs-backend.herokuapp.com/users"));
-
-        return jsonArray.getJSONObject(jsonArray.length()-1).getInt("id");
-
-    }
-
-    public void AddKorisnickiRacun(Osobe e){
-        URL url = null;
+         url = null;
         try {
             url = new URL("https://nrs-backend.herokuapp.com/users");
         } catch (MalformedURLException e1) {
             e1.printStackTrace();
         }
-        HttpURLConnection con = null;
-        try {
-            con = (HttpURLConnection)url.openConnection();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        try {
-            con.setRequestMethod("POST");
-        } catch (ProtocolException e1) {
-            e1.printStackTrace();
-        }
-        con.setRequestProperty("Content-Type", "application/json");
-        con.setRequestProperty("Accept", "application/json");
-        con.setDoOutput(true);
 
-        int max = MaxIdKorisnickiRacun();
-        max += 10;
-
-        //max++;
-   //     String json = "{ \"id\":  \""+max+"\", \"osoba_id\": \""+e.getId()+"\"," +
-    //            "\"pravo_pristupa\":  \""+2+"\",\"password\":  \""+e.getPassword()+"\",\"email\":  \""+e.getEmail()+"\"}";
-
-        String json = "{ \"id\":  \""+max+"\", \"ime\": \""+e.getIme()+"\"," +
+         json = "{ \"ime\": \""+e.getIme()+"\"," +
                 "\"prezime\":  \""+e.getPrezime()+"\",\"telefon\":  \""+e.getTelefon()+"\",\"datum_zaposljavanja\":  \""+e.getDatum_zaposljavanja()+"\",\"jmbg\":  \""+e.getJMBG()+"\",\"lokacija\":  \""+e.getNaziv_lokacije()+"\",\"pravo_pristupa\": \""+2+"\", \"email\":  \""+e.getEmail()+"\",\"password\": \""+e.getPassword()+"\"}";
 
-        System.out.println(json);
-
-        try(OutputStream os = con.getOutputStream()) {
-            byte[] input = json.getBytes("utf-8");
-            os.write(input, 0, input.length);
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-
-        try(BufferedReader br = new BufferedReader(
-                new InputStreamReader(con.getInputStream(), "utf-8"))) {
-            StringBuilder response = new StringBuilder();
-            String responseLine = null;
-            while ((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
-            }
-            System.out.println(response.toString());
-
-        } catch (UnsupportedEncodingException e1) {
-            e1.printStackTrace();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-
+        addUsingHttp(json,url);
     }
 
     public void deleteEmployee(Osobe e){

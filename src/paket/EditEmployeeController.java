@@ -199,6 +199,8 @@ public class EditEmployeeController {
 
     public void actDate(ActionEvent actionEvent) {
         LocalDate date = datePicker.getValue();
+        if(date != null) datePicker.getStyleClass().add("poljeIspravno");
+
         //System.err.println("Selected date: " + date);
 
     }
