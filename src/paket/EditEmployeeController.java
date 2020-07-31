@@ -166,8 +166,8 @@ public class EditEmployeeController {
     }
 
     public void actOk(ActionEvent actionEvent) {
-        if(!(fldFirstName.getText().isEmpty()) && !(fldLastName.getText().isEmpty()) && !(fldPhone.getText().isEmpty()) && (EditController.DaLiJeBroj(fldJMBG.getText())) && fldJMBG.getText().length() == 13
-        && validacijaEmaila(fldEmail.getText()) && checkPassword(fldPassword.getText())) {
+        if(!(fldFirstName.getText().isEmpty()) && !(fldLastName.getText().isEmpty()) && ((fldPhone.getText().length() > 5 && EditController.DaLiJeBroj(fldPhone.getText()))) && (EditController.DaLiJeBroj(fldJMBG.getText())) && fldJMBG.getText().length() == 13
+        && validacijaEmaila(fldEmail.getText()) && checkPassword(fldPassword.getText()) && datePicker.getValue() != null) {
             if(employee == null) employee = new Osobe();
             employee.setIme(fldFirstName.getText());
             employee.setPrezime(fldLastName.getText());
