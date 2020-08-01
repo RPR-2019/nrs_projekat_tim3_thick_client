@@ -78,7 +78,7 @@ public class MainController {
         colPrice.setCellValueFactory(new PropertyValueFactory<Proizvod, Integer>("cijena"));
 
         obsProizvodi.clear();
-        ArrayList<Skladiste> skladista = model.getSkladista();
+        ObservableList<Skladiste> skladista = model.getSkladista();
         String skl = "";
         if (spinnerSkladiste.getItems().size() != 0) {
             skl = spinnerSkladiste.getSelectionModel().getSelectedItem().toString();  // Prije nego sto se obrise spasi zadnji selektovani item
@@ -126,6 +126,11 @@ public class MainController {
                             break;
                         }
                     }
+                    tbProducts.getItems().clear();
+                    ArrayList<Proizvod> ps = model.getProizvodiSkladista(sk);
+                    ObservableList<Proizvod> pr = FXCollections.observableArrayList();
+                    for(int i=0 ; i<ps.size() ; i++) pr.add(ps.get(i));
+                    tbProducts.setItems(pr);
                 }
             }
         });
@@ -149,7 +154,7 @@ public class MainController {
 
         colNameCat.setCellValueFactory(new PropertyValueFactory<Kategorija, String>("naziv"));
         // colName.setCellValueFactory(new PropertyValueFactory<Kategorija,Integer>("nadkategorija"));
-        ArrayList<Kategorija> categories = modelKat.getCategories();
+        ObservableList<Kategorija> categories = modelKat.getCategories();
         kategorije.clear();
 
         for (int i = 0; i < categories.size(); i++) {
@@ -343,10 +348,55 @@ public class MainController {
                             break;
                         }
                     }
+                //    if(tbAvailableProducts.getItems().size() != 0)
+              //      tbAvailableProducts.getItems().clear();
+                    ArrayList<Proizvod> ps = model.getProizvodiSkladista(sk1);
+                    ObservableList<Proizvod> pr = FXCollections.observableArrayList();
+                    for(int i=0 ; i<ps.size() ; i++) pr.add(ps.get(i));
+                    tbAvailableProducts.setItems(pr);
+                    pomocna();
                 }
             }
         });
 
+    }
+
+    public void pomocna(){
+        ObservableList<Proizvod> dostupni = FXCollections.observableArrayList();
+
+     //   sk1 = skladista.get(0);
+        dostupni.clear();
+        //     if (br == 1) {
+        ArrayList<Proizvod> proizvods = model.getProizvodiSkladista(sk1);
+        for (int j = 0; j < proizvods.size(); j++) {
+            if (proizvods.get(j).getKolicina() > 0) {
+                dostupni.add(proizvods.get(j));
+            }
+        }
+
+        FilteredList<Proizvod> filteredData = new FilteredList<>(dostupni,b->true);
+
+        fldPretraga.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(proizvod -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                if (proizvod.getNaziv().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }
+
+                return false; // Does not match.
+            });
+        });
+
+        SortedList<Proizvod> sortedData = new SortedList<>(filteredData);
+
+        sortedData.comparatorProperty().bind(tbAvailableProducts.comparatorProperty());
+
+        tbAvailableProducts.setItems(sortedData);
     }
 
     public void actAdd(ActionEvent actionEvent) {
@@ -371,10 +421,15 @@ public class MainController {
                     model.addProduct(product, sk,product.getDobavljac());
                     //  model.addProductWarehouse(product,sk,kolicina);
                     //       obsProizvodi.clear();
-                    initialize();
-                    //      tbProducts.getItems().clear();
+                  //  initialize();
+                          tbProducts.getItems().clear();
                     //       model = new SkladisteDAO();
                     //        tbProducts.setItems(model.getProducts());
+                    ArrayList<Proizvod> ps = model.getProizvodiSkladista(sk);
+                    ObservableList<Proizvod> p = FXCollections.observableArrayList();
+                    for(int i=0 ; i<ps.size() ; i++) p.add(ps.get(i));
+                    tbProducts.setItems(p);
+                    pomocna();
 
                 }
 
@@ -391,28 +446,32 @@ public class MainController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/edit.fxml"), bundle);
         Proizvod proizvod = model.getCurrentProduct();
         EditController editController = new EditController(proizvod,sk);
-        Stage editBookWindow = new Stage();
+        Stage editProductWindow = new Stage();
         loader.setController(editController);
         Parent root = null;
         try {
             root = loader.load();
-            editBookWindow.setScene(new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
-            editBookWindow.setResizable(false);
-            editBookWindow.show();
+            editProductWindow.setScene(new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
+            editProductWindow.setResizable(false);
+            editProductWindow.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
 
-        editBookWindow.setOnHiding(Event -> {
+        editProductWindow.setOnHiding(Event -> {
             Proizvod p = editController.getProduct();
-            if (p != null) {
+            if (p != null && editController.getCancel() == false) {
                 //     int kolicina = editController.getKolicina();
                 //     p.setKolicina(kolicina);
                 //     model.updateCurrentProductWarehouse(p,sk.getId(),kolicina);
                 model.updateCurrentProduct(p,sk,p.getDobavljac());
                 obsProizvodi.clear();
-                initialize();
+                ArrayList<Proizvod> ps = model.getProizvodiSkladista(sk);
+                ObservableList<Proizvod> pr = FXCollections.observableArrayList();
+                for(int i=0 ; i<ps.size() ; i++) pr.add(ps.get(i));
+                tbProducts.setItems(pr);
+                pomocna();
             }
         });
     }
@@ -429,8 +488,13 @@ public class MainController {
              //   model.deleteFromWarehouse(model.getCurrentProduct());
                 model.deleteProduct(model.getCurrentProduct(),sk);
                 obsProizvodi.clear();
-                initialize();
+                ArrayList<Proizvod> ps = model.getProizvodiSkladista(sk);
+                ObservableList<Proizvod> pr = FXCollections.observableArrayList();
+                for(int i=0 ; i<ps.size() ; i++) pr.add(ps.get(i));
+                tbProducts.setItems(pr);
                 tbProducts.getSelectionModel().selectLast();
+                pomocna();
+
             }
         }
     }
@@ -461,7 +525,9 @@ public class MainController {
                 Kategorija k = editCategoryController.getKategorija();
                 if (k != null) {
                     model.addCategory(k);
-                    initialize();
+                    tbCategories.getItems().clear();
+                    tbCategories.setItems(model.getCategories());
+
                 }
 
             });
@@ -492,7 +558,8 @@ public class MainController {
                 Kategorija k = editCategoryController.getKategorija();
                 if (k != null) {
                     model.updateCurrentCategory(k);
-                    initialize();
+                    tbCategories.getItems().clear();
+                    tbCategories.setItems(model.getCategories());
                 }
 
             });
@@ -503,18 +570,38 @@ public class MainController {
         }
     }
 
+    private boolean DaLiProizvodImaKat(Kategorija k){
+        ArrayList<Proizvod> proizvodi = model.getProizvodiSkladista(sk);
+        for(Proizvod p : proizvodi){
+            if(p.getKategorija().getNaziv().equals(k.getNaziv())){
+                System.out.println(p.getNaziv() + " " + p.getKategorija().getNaziv());
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Dialog");
+                alert.setHeaderText("");
+                alert.setContentText("There are products with this category!");
+                alert.showAndWait();
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void actDeleteCat(ActionEvent actionEvent) {
         if (model.getCurrentCategory() != null) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Confirmation Dialog");
-            alert.setHeaderText("");
-            alert.setContentText("Are you sure you want to delete this category?");
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK) {
-                model.deleteCategory(model.getCurrentCategory());
-                System.out.println("OMG");
-                initialize();
-                tbCategories.getSelectionModel().selectLast();
+            boolean imali = DaLiProizvodImaKat(model.getCurrentCategory());
+            if (imali == false) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Confirmation Dialog");
+                alert.setHeaderText("");
+                alert.setContentText("Are you sure you want to delete this category?");
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == ButtonType.OK) {
+                    model.deleteCategory(model.getCurrentCategory());
+                    System.out.println("OMG");
+                    tbCategories.getItems().clear();
+                    tbCategories.setItems(model.getCategories());
+                    tbCategories.getSelectionModel().selectLast();
+                }
             }
         }
     }
@@ -540,7 +627,8 @@ public class MainController {
             Osobe o = editController.getEmployee();
             if (o != null) {
                 model.addEmployee(o);
-                initialize();
+                tbEmployees.getItems().clear();
+                tbEmployees.setItems(model.getEmployees());
             }
         });
     }
@@ -564,7 +652,8 @@ public class MainController {
                 Osobe employee = editController.getEmployee();
                 if (employee != null) {
                     model.updateCurrentEmployee(employee);
-                    initialize();
+                    tbEmployees.getItems().clear();
+                    tbEmployees.setItems(model.getEmployees());
                 }
 
             });
@@ -585,7 +674,8 @@ public class MainController {
             if (result.get() == ButtonType.OK) {
                 model.deleteEmployee(model.getCurrentEmployee());
                 //  System.out.println("OMG");
-                initialize();
+                tbEmployees.getItems().clear();
+                tbEmployees.setItems(model.getEmployees());
                 tbEmployees.getSelectionModel().selectLast();
             }
         }
@@ -640,7 +730,8 @@ public class MainController {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-                initialize();
+                tbWarehouses.getItems().clear();
+                tbWarehouses.setItems(model.getSkladista());
             }
         });
     }
@@ -671,23 +762,43 @@ public class MainController {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-                initialize();
+                tbWarehouses.getItems().clear();
+                tbWarehouses.setItems(model.getSkladista());
             }
         });
     }
 
+    public boolean ImaLiWarehouseIteme(Skladiste sk){
+        ArrayList<Proizvod> skk = model.getProizvodiSkladista(sk);
+
+        if(skk.size() != 0) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText("");
+            alert.setContentText("This warehouse has items!");
+
+            alert.showAndWait();
+            return true;
+        }
+        return false;
+    }
+
     public void actDeleteWarehouse(ActionEvent actionEvent) {
         if (model.getCurrentWarehouse() != null) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Confirmation Dialog");
-            alert.setHeaderText("");
-            alert.setContentText("Are you sure you want to delete this warehouse?");
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK) {
-                model.deleteWarehouse(model.getCurrentWarehouse());
-                //  System.out.println("OMG");
-                initialize();
-                tbWarehouses.getSelectionModel().selectLast();
+            boolean imali = ImaLiWarehouseIteme(model.getCurrentWarehouse());
+            if (imali == false) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Confirmation Dialog");
+                alert.setHeaderText("");
+                alert.setContentText("Are you sure you want to delete this warehouse?");
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == ButtonType.OK) {
+                    model.deleteWarehouse(model.getCurrentWarehouse());
+                    //  System.out.println("OMG");
+                    tbWarehouses.getItems().clear();
+                    tbWarehouses.setItems(model.getSkladista());
+                    tbWarehouses.getSelectionModel().selectLast();
+                }
             }
         }
     }

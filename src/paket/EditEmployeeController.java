@@ -1,5 +1,7 @@
 package paket;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -21,6 +23,7 @@ public class EditEmployeeController {
     public TextField fldEmail;
     public TextField fldPassword;
     public DatePicker datePicker;
+    private boolean validno;
 
     public EditEmployeeController(Osobe employee){
         this.employee = employee;
@@ -36,6 +39,7 @@ public class EditEmployeeController {
             fldLocation.getStyleClass().add("poljeNijeIspravno");
             fldEmail.getStyleClass().add("poljeNijeIspravno");
             fldPassword.getStyleClass().add("poljeNijeIspravno");
+            validno = false;
         }
         else {
             fldFirstName.getStyleClass().add("poljeIspravno");
@@ -55,6 +59,7 @@ public class EditEmployeeController {
             fldLocation.setText(employee.getNaziv_lokacije());
             fldEmail.setText(employee.getEmail());
             fldPassword.setText(employee.getPassword());
+            validno = true;
         }
 
         fldFirstName.textProperty().addListener((obs, oldIme, newIme) -> {
@@ -120,6 +125,21 @@ public class EditEmployeeController {
                 fldLocation.getStyleClass().add("poljeNijeIspravno");
             }
         });
+        datePicker.valueProperty().addListener(new ChangeListener<LocalDate>() {
+            @Override
+            public void changed(ObservableValue<? extends LocalDate> observableValue, LocalDate localDate, LocalDate t1) {
+                if(t1.isAfter(LocalDate.now())){
+                    datePicker.getStyleClass().removeAll("poljeIspravno");
+                    datePicker.getStyleClass().add("poljeNijeIspravno");
+                    validno = false;
+                }
+                else {
+                    datePicker.getStyleClass().removeAll("poljeNijeIspravno");
+                    datePicker.getStyleClass().add("poljeIspravno");
+                    validno = true;
+                }
+            }
+        });
 
 
     }
@@ -166,8 +186,8 @@ public class EditEmployeeController {
     }
 
     public void actOk(ActionEvent actionEvent) {
-        if(!(fldFirstName.getText().isEmpty()) && !(fldLastName.getText().isEmpty()) && ((fldPhone.getText().length() > 5 && EditController.DaLiJeBroj(fldPhone.getText()))) && (EditController.DaLiJeBroj(fldJMBG.getText())) && fldJMBG.getText().length() == 13
-        && validacijaEmaila(fldEmail.getText()) && checkPassword(fldPassword.getText()) && datePicker.getValue() != null) {
+        if(!(fldFirstName.getText().isEmpty()) && fldFirstName.getText().length() > 2 && !(fldLastName.getText().isEmpty()) && fldLastName.getText().length() > 2 && ((fldPhone.getText().length() > 5 && EditController.DaLiJeBroj(fldPhone.getText()))) && (EditController.DaLiJeBroj(fldJMBG.getText())) && fldJMBG.getText().length() == 13
+        && validacijaEmaila(fldEmail.getText()) && checkPassword(fldPassword.getText()) && validno == true && fldLocation.getText().length() != 0) {
             if(employee == null) employee = new Osobe();
             employee.setIme(fldFirstName.getText());
             employee.setPrezime(fldLastName.getText());
@@ -197,12 +217,6 @@ public class EditEmployeeController {
         this.employee = employee;
     }
 
-    public void actDate(ActionEvent actionEvent) {
-        LocalDate date = datePicker.getValue();
-        if(date != null) datePicker.getStyleClass().add("poljeIspravno");
 
-        //System.err.println("Selected date: " + date);
-
-    }
 
 }

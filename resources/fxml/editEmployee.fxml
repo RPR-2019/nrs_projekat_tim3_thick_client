@@ -104,6 +104,6 @@
             <Insets right="21.0" />
          </GridPane.margin>
       </TextField>
-      <DatePicker fx:id="datePicker" onAction="#actDate" prefHeight="25.0" prefWidth="159.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+      <DatePicker fx:id="datePicker"  prefHeight="25.0" prefWidth="159.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
     </children>
 </GridPane>

@@ -24,7 +24,7 @@ public class SkladisteDAO {
     private static SkladisteDAO instance;
     private static Connection connection;
     private ArrayList<Proizvodjac> manufacturers = new ArrayList<>();
-    private ArrayList<Kategorija> categories = new ArrayList<>();
+    private ObservableList<Kategorija> categories = FXCollections.observableArrayList();
     private ObservableList<Proizvod> products = FXCollections.observableArrayList();
     private SimpleObjectProperty<Proizvod> currentProduct = null;
     private SimpleObjectProperty<Kategorija> currentCategory = null;
@@ -132,34 +132,7 @@ public class SkladisteDAO {
         addUsingHttp(json, url);
     }
 
-    private void addViaHttp (JSONObject jsonObject, URL url) {
-        HttpURLConnection con = null;
-        JSONObject jsonObject1 = null;
-        try {
-            byte[] data = jsonObject.toString().getBytes();
-            con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("POST");
-            con.setRequestProperty("Content-Type", "application/json");
-            con.setDoOutput(true);
-            DataOutputStream out = new DataOutputStream(con.getOutputStream());
-            out.write(data);
-            out.flush();
-            out.close();
-
-            BufferedReader entry = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String json = "{", line = "";
-            while ((line = entry.readLine()) != null) {
-                json = json + line;
-            }
-            json = json + "}";
-            entry.close();
-
-        } finally {
-            return;
-        }
-    }
-
-    private void deleteViaHttp (URL url) {
+    private void deleteUsingHttp (URL url) {
         HttpURLConnection httpCon = null;
         try {
             httpCon = (HttpURLConnection) url.openConnection();
@@ -237,7 +210,7 @@ public class SkladisteDAO {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        deleteViaHttp( url);
+        deleteUsingHttp(url);
     }
 
     public ObservableList<Dobavljac> getDobavljaci(){
@@ -272,10 +245,10 @@ public class SkladisteDAO {
         return manufacturers;
     }
 
-    public ArrayList<Kategorija> getCategories() {
+    public ObservableList<Kategorija> getCategories() {
         JSONArray jsonCategories  = new JSONArray(dajJson("https://nrs-backend.herokuapp.com/categories"));
         if (jsonCategories == null) return null;
-
+        categories.clear();
         for(int i=0 ; i<jsonCategories.length() ; i++) {
             JSONObject jo = jsonCategories.getJSONObject(i);
 
@@ -298,7 +271,6 @@ public class SkladisteDAO {
                 }
             }
             Kategorija k = new Kategorija(id,naziv,nad);
-
             categories.add(k);
         }
         return categories;
@@ -312,17 +284,42 @@ public class SkladisteDAO {
             e.printStackTrace();
         }
         Integer nad = null;
-
-        for(int i=0 ; i<categories.size() ; i++){
-            if(categories.get(i).getNaziv().equals(k.getNadKategorija())){
-                nad = i;
+        ObservableList<Kategorija> kat = getCategories();
+        System.out.println(kat.size());
+        for(int i=0 ; i<kat.size() ; i++){
+            if(kat.get(i).getNaziv().equals(k.getNadKategorija())){
+                nad = kat.get(i).getId();
                 break;
             }
         }
-        String json = "{ \"naziv\": \"" + k.getNaziv() + "\"," +
-                "\"nadkategorija\":  \"" + nad + "\"}";
+        System.out.println(k.getNadKategorija() + " " + nad);
 
-        addUsingHttp(json, url);
+        JSONObject jsonCat = new JSONObject();
+        jsonCat.put("naziv",k.getNaziv());
+        jsonCat.put("nadkategorija",nad);
+        HttpURLConnection con = null;
+        try {
+            byte[] data = jsonCat.toString().getBytes();
+            con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setDoOutput(true);
+            DataOutputStream out = new DataOutputStream(con.getOutputStream());
+            out.write(data);
+            out.flush();
+            out.close();
+
+            BufferedReader entry = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String json = "{", line = "";
+            while ((line = entry.readLine()) != null) {
+                json = json + line;
+            }
+            json = json + "}";
+            entry.close();
+
+        } finally {
+            return;
+        }
     }
 
     public void addUsingHttp(String json,URL url){
@@ -447,7 +444,7 @@ public class SkladisteDAO {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        deleteViaHttp(url);
+        deleteUsingHttp(url);
     }
 
     public void deleteProduct(Proizvod product,Skladiste sk) {
@@ -458,7 +455,7 @@ public class SkladisteDAO {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        deleteViaHttp(url);
+        deleteUsingHttp(url);
 
          url = null;
         try {
@@ -466,7 +463,7 @@ public class SkladisteDAO {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        deleteViaHttp(url);
+        deleteUsingHttp(url);
 
         url = null;
         try {
@@ -475,7 +472,7 @@ public class SkladisteDAO {
             e.printStackTrace();
         }
 
-        deleteViaHttp(url);
+        deleteUsingHttp(url);
     }
 
     public void updateCurrentProduct(Proizvod proizvod,Skladiste sk,Dobavljac dobavljac) {
@@ -513,7 +510,7 @@ public class SkladisteDAO {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        deleteViaHttp(url);
+        deleteUsingHttp(url);
 
         url = null;
 
@@ -567,6 +564,7 @@ public class SkladisteDAO {
         }
     }
 
+
         public void updateCurrentCategory(Kategorija k){
         try {
             URL url = null;
@@ -585,11 +583,34 @@ public class SkladisteDAO {
                 }
             }
 
-            String json = "{ \"naziv\": \"" + k.getNaziv() + "\"," +
-                    "\"nadkategorija\":  \"" + nad + "\"}";
+            JSONObject jsonCat = new JSONObject();
+            jsonCat.put("naziv",k.getNaziv());
+            jsonCat.put("nadkategorija",nad);
 
+            HttpURLConnection con = null;
+            try {
+                byte[] data = jsonCat.toString().getBytes();
+                con = (HttpURLConnection) url.openConnection();
+                con.setRequestMethod("PUT");
+                con.setRequestProperty("Content-Type", "application/json");
+                con.setDoOutput(true);
+                con.connect();
+                DataOutputStream out = new DataOutputStream(con.getOutputStream());
+                out.write(data);
+                out.flush();
+                out.close();
 
-            updateUsingHttp(json,url);
+                BufferedReader entry = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                String json = "", line = "";
+                while ((line = entry.readLine()) != null) {
+                    json = json + line;
+                }
+                entry.close();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             currentCategory.set(k);
             } catch (Exception e) {
             e.printStackTrace();
@@ -639,8 +660,8 @@ public class SkladisteDAO {
         return trazeni_id;
     }
 
-    public ArrayList<Skladiste> getSkladista() {
-        ArrayList<Skladiste> skladista = new ArrayList<>();
+    public ObservableList<Skladiste> getSkladista() {
+        ObservableList<Skladiste> skladista = FXCollections.observableArrayList();
         JSONArray jsonManufacturers  = new JSONArray(dajJson("https://nrs-backend.herokuapp.com/warehouses"));
         if (jsonManufacturers == null) return null;
 
@@ -695,9 +716,8 @@ public class SkladisteDAO {
         ArrayList<Proizvod> p_skladista = new ArrayList<>();
         try {
             ArrayList<Proizvodjac> proizvodjaci = getManufacturers();
-            ArrayList<Kategorija> kategorije = getCategories();
             //   ObservableList<Proizvod> proizvodi = getProducts();
-            ArrayList<Skladiste> skladista = getSkladista();
+            ObservableList<Skladiste> skladista = getSkladista();
             JSONArray proizvodi_skladista = new JSONArray(dajJson("https://nrs-backend.herokuapp.com/warehouses/" + skl.getId() + "/items"));
 
             for (int i = 0; i < proizvodi_skladista.length(); i++) {
@@ -747,12 +767,12 @@ public class SkladisteDAO {
     }
 
     private Dobavljac findDobavljac(int id) {
-        JSONArray skladista = new JSONArray(dajJson("https://nrs-backend.herokuapp.com/suppliers/"));
-        int vel = skladista.length();
+        JSONArray dobavljaci = new JSONArray(dajJson("https://nrs-backend.herokuapp.com/suppliers/"));
+        int vel = dobavljaci.length();
         Dobavljac dobavljac = new Dobavljac();
 
         for (int i = 0; i < vel; i++) {
-            JSONObject jo = skladista.getJSONObject(i);
+            JSONObject jo = dobavljaci.getJSONObject(i);
             int dobavljac_id = jo.getInt("id");
             String naziv = jo.getString("naziv");
             JSONArray proizvodi_dobavljaca = new JSONArray(dajJson("https://nrs-backend.herokuapp.com/suppliers/" + dobavljac_id + "/items"));
@@ -766,6 +786,7 @@ public class SkladisteDAO {
             }
             if(dobavljac.getNaziv() != null) break;
         }
+        System.out.println(dobavljac.getId());
         return dobavljac;
     }
 
@@ -867,7 +888,7 @@ public class SkladisteDAO {
         } catch (MalformedURLException e1) {
             e1.printStackTrace();
         }
-        deleteViaHttp(url);
+        deleteUsingHttp(url);
 
          url = null;
         try {
@@ -875,7 +896,7 @@ public class SkladisteDAO {
         } catch (MalformedURLException e1) {
             e1.printStackTrace();
         }
-        deleteViaHttp(url);
+        deleteUsingHttp(url);
     }
 
 }

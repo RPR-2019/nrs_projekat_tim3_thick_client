@@ -28,22 +28,13 @@ public class EditController {
     private ObservableList<String> obsDobavljaci = FXCollections.observableArrayList();
     private ObservableList<Proizvodjac> obsManufacturers = FXCollections.observableArrayList();
     private ObservableList<Kategorija> obskategorije = FXCollections.observableArrayList();
+    private boolean Cancel = false;
 
     public static boolean DaLiJeBroj(String str){
         String regex = "[0-9]+";
         if(!(str.matches(regex))) return false;
 
         return true;
-    }
-
-    public ObservableList<Kategorija> DajKategorije(){
-        ArrayList<Kategorija> categories = model.getCategories();
-
-        for(int i=0 ; i<categories.size() ; i++){
-            obskategorije.add(categories.get(i));
-        }
-
-        return obskategorije;
     }
 
     public ObservableList<Proizvodjac> DajProizvodjace(){
@@ -119,7 +110,7 @@ public class EditController {
         for(int i=0 ; i<obsManufacturers.size() ; i++){
             manu.add(obsManufacturers.get(i).getNaziv());
         }
-        obskategorije = DajKategorije();
+        obskategorije = model.getCategories();
         ObservableList<String> kate = FXCollections.observableArrayList();
         for(int i=0 ; i<obskategorije.size() ; i++){
             kate.add(obskategorije.get(i).getNaziv());
@@ -168,8 +159,8 @@ public class EditController {
                 fldCijena.getStyleClass().removeAll("poljeNijeIspravno");
                 fldCijena.getStyleClass().add("poljeIspravno");
             } else {
-                fldNaziv.getStyleClass().removeAll("poljeIspravno");
-                fldNaziv.getStyleClass().add("poljeNijeIspravno");
+                fldCijena.getStyleClass().removeAll("poljeIspravno");
+                fldCijena.getStyleClass().add("poljeNijeIspravno");
             }
         });
 
@@ -190,7 +181,8 @@ public class EditController {
     }
 
     public void actOk(ActionEvent actionEvent) {
-        if(fldNaziv.getText().length() != 0  && (product == null  && !ProvjeraDaLiVecPostojiProizvod(fldNaziv.getText(),sk) || (product != null )) && DaLiJeBroj(fldKolicina.getText()) && DaLiJeBroj(fldCijena.getText())) {
+        if(fldNaziv.getText().length() > 3 && (product == null  && !ProvjeraDaLiVecPostojiProizvod(fldNaziv.getText(),sk) || (product != null )) && DaLiJeBroj(fldKolicina.getText()) && DaLiJeBroj(fldCijena.getText())
+        && choiceProizvodjac.getValue() != null && choiceKategorija.getValue() != null && choiceDobavljac.getValue() != null) {
             if(product == null) {
                 product = new Proizvod();
             }
@@ -207,7 +199,12 @@ public class EditController {
 
     }
 
+    public boolean getCancel() {
+        return Cancel;
+    }
+
     public void actCancel(ActionEvent actionEvent) {
+        Cancel = true;
         Node n = (Node) actionEvent.getSource();
         Stage stage = (Stage) n.getScene().getWindow();
         stage.close();

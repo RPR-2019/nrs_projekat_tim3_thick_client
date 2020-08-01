@@ -23,6 +23,7 @@ public class LoginController {
     public TextField fldPassword;
     private SkladisteDAO skladisteDAO;
     private Button btnCancel;
+    public Button btnOk;
 
 
     @FXML
@@ -62,7 +63,9 @@ public class LoginController {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
+                Stage stage1 = (Stage) btnOk.getScene().getWindow();
+                stage1.close();
+            break;
             }
             else {
                 fldUsername.getStyleClass().removeAll("poljeIspravno");

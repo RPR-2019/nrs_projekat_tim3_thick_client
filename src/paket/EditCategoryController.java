@@ -10,8 +10,6 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
-
 public class EditCategoryController {
     public TextField fldNaziv;
     public Button btnOk;
@@ -25,7 +23,7 @@ public class EditCategoryController {
     }
 
     public ObservableList<String> DajKategorije(){
-        ArrayList<Kategorija> categories = model.getCategories();
+        ObservableList<Kategorija> categories = model.getCategories();
 
         for(int i=0 ; i<categories.size() ; i++){
             obskategorije.add(categories.get(i).getNaziv());
@@ -65,7 +63,7 @@ public class EditCategoryController {
     }
 
     public boolean provjeraKat(String str){
-        ArrayList<Kategorija> categories = model.getCategories();
+        ObservableList<Kategorija> categories = model.getCategories();
         boolean postoji = false;
 
         for(int i=0 ; i<categories.size() ; i++){

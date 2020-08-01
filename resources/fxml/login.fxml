@@ -36,7 +36,7 @@
         </TextField>
         <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
             <buttons>
-                <Button mnemonicParsing="false" onAction="#actLogin" text="Login" />
+                <Button fx:id="btnOk" mnemonicParsing="false" onAction="#actLogin" text="Login" />
                 <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#actCancel" text="Cancel" />
             </buttons>
             <GridPane.margin>

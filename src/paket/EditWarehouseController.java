@@ -1,11 +1,10 @@
 package paket;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
-import java.util.ArrayList;
 
 public class EditWarehouseController {
 
@@ -21,7 +20,7 @@ public class EditWarehouseController {
     }
 
     public boolean provjeraDaLiPostojiSkl(String str){
-        ArrayList<Skladiste> skladista = model.getSkladista();
+        ObservableList<Skladiste> skladista = model.getSkladista();
 
         for(Skladiste s : skladista){
             if(s.getNaziv().equals(str)) return false;
