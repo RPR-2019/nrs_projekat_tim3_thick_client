@@ -159,7 +159,7 @@ public class SkladisteDAO {
             while ((responseLine = br.readLine()) != null) {
                 response.append(responseLine.trim());
             }
-            System.out.println(response.toString());
+         //   System.out.println(response.toString());
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -367,7 +367,7 @@ public class SkladisteDAO {
         Proizvod p = new Proizvod();
         int id = 0;
         for(int i=0 ; i<proizvodi.length() ; i++){
-            if(proizvodi.getJSONObject(i).getString("naziv").equals(proizvod.getNaziv())){
+            if(proizvodi.getJSONObject(i).getString("naziv").toLowerCase().equals(proizvod.getNaziv().toLowerCase()) && proizvod.getProizvodjac().getId() == proizvodi.getJSONObject(i).getInt("proizvodjac")){
                 id = proizvodi.getJSONObject(i).getInt("id");
            //     System.out.println(proizvod.getNaziv());
                 return id;
@@ -504,6 +504,22 @@ public class SkladisteDAO {
         deleteUsingHttp(url);
     }
 
+    public boolean checkIfProductExitsAnyWarehouse(Proizvod proizvod){
+        JSONArray jsonArray = new JSONArray(dajJson("https://nrs-backend.herokuapp.com/warehouses"));
+
+        int vel = jsonArray.length();
+
+        for(int i=0 ; i<vel ; i++){
+            JSONObject skl = jsonArray.getJSONObject(i);
+            JSONArray products = new JSONArray(dajJson("https://nrs-backend.herokuapp.com/warehouses/"+skl.getInt("id")+"/items"));
+
+            for(int j=0 ; j<products.length() ; j++){
+                if(products.getJSONObject(j).getInt("proizvod_id") == proizvod.getId()) return true;
+            }
+        }
+        return false;
+    }
+
     public void deleteProduct(Proizvod product,Skladiste sk) {
         URL url = null;
         try {
@@ -512,6 +528,28 @@ public class SkladisteDAO {
             e.printStackTrace();
         }
         deleteUsingHttp(url);
+
+        boolean postoji = checkIfProductExitsAnyWarehouse(product);
+
+        if(postoji == false) {
+             url = null;
+            try {
+                url = new URL("https://nrs-backend.herokuapp.com/suppliers/" + findDobavljac(product.getId()).getId() +"/items/"+product.getId());
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            deleteUsingHttp(url);
+
+            url = null;
+            try {
+                url = new URL("https://nrs-backend.herokuapp.com/items/" +product.getId());
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            deleteUsingHttp(url);
+        }
+
+
     }
 
     public void updateCurrentProduct(Proizvod proizvod,Skladiste sk,Dobavljac dobavljac) {
@@ -664,7 +702,7 @@ public class SkladisteDAO {
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
-        System.out.println(employee.getIme());
+       // System.out.println(employee.getIme());
             String json = "{ \"ime\": \""+employee.getIme()+"\"," +
                     "\"prezime\":  \""+employee.getPrezime()+"\",\"telefon\":  \""+employee.getTelefon()+"\",\"datum_zaposljavanja\":  \""+employee.getDatum_zaposljavanja()+"\",\"jmbg\":  \""+employee.getJMBG()+"\",\"lokacija\":  \""+employee.getNaziv_lokacije()+"\"}";
 

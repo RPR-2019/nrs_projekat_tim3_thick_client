@@ -29,6 +29,8 @@ public class EditController {
     private ObservableList<Proizvodjac> obsManufacturers = FXCollections.observableArrayList();
     private ObservableList<Kategorija> obskategorije = FXCollections.observableArrayList();
     private boolean Cancel = false;
+    ArrayList<Proizvod> products = new ArrayList<>();
+
 
     public static boolean DaLiJeBroj(String str){
         String regex = "[0-9]+";
@@ -57,8 +59,6 @@ public class EditController {
     }
 
     public boolean ProvjeraDaLiVecPostojiProizvod(String str,Skladiste sk){
-        ArrayList<Proizvod> products = model.getProizvodiSkladista(sk);
-
         for(Proizvod p : products){
             if(p.getNaziv().equals(str)){
                 return true;
@@ -115,6 +115,7 @@ public class EditController {
         for(int i=0 ; i<obskategorije.size() ; i++){
             kate.add(obskategorije.get(i).getNaziv());
         }
+        products = model.getProizvodiSkladista(sk);
         choiceProizvodjac.setItems(manu);
         choiceKategorija.setItems(kate);
 
@@ -132,7 +133,7 @@ public class EditController {
             fldNaziv.setText(product.getNaziv());
             choiceProizvodjac.setValue(product.getProizvodjac().getNaziv());
             String value = choiceProizvodjac.getSelectionModel().getSelectedItem().toString();
-            System.out.println(product.getDobavljac());
+         //   System.out.println(product.getDobavljac());
             choiceKategorija.setValue(product.getKategorija().getNaziv());
             choiceDobavljac.setValue(product.getDobavljac().getNaziv());
             fldCijena.setText(String.valueOf(product.getCijena()));

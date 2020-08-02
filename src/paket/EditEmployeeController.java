@@ -2,6 +2,8 @@ package paket;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -10,6 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.time.LocalDate;
+import java.util.regex.Pattern;
 
 public class EditEmployeeController {
 
@@ -24,12 +27,17 @@ public class EditEmployeeController {
     public TextField fldPassword;
     public DatePicker datePicker;
     private boolean validno;
+    private SkladisteDAO model;
+    ObservableList<Osobe> emp = FXCollections.observableArrayList();
+
 
     public EditEmployeeController(Osobe employee){
         this.employee = employee;
+        model = new SkladisteDAO();
     }
 
     public void initialize(){
+        emp = model.getEmployees();
         if(employee == null){
             fldFirstName.getStyleClass().add("poljeNijeIspravno");
             fldLastName.getStyleClass().add("poljeNijeIspravno");
@@ -63,7 +71,7 @@ public class EditEmployeeController {
         }
 
         fldFirstName.textProperty().addListener((obs, oldIme, newIme) -> {
-            if (!newIme.isEmpty() && newIme.length() > 2) {
+            if (!newIme.isEmpty() && newIme.length() > 2 && !validacijaImena(newIme)) {
                 fldFirstName.getStyleClass().removeAll("poljeNijeIspravno");
                 fldFirstName.getStyleClass().add("poljeIspravno");
             } else {
@@ -72,7 +80,7 @@ public class EditEmployeeController {
             }
         });
         fldLastName.textProperty().addListener((obs, oldIme, newIme) -> {
-            if (!newIme.isEmpty() && newIme.length() > 2) {
+            if (!newIme.isEmpty() && newIme.length() > 2 && !validacijaImena(newIme)) {
                 fldLastName.getStyleClass().removeAll("poljeNijeIspravno");
                 fldLastName.getStyleClass().add("poljeIspravno");
             } else {
@@ -90,7 +98,7 @@ public class EditEmployeeController {
             }
         });
         fldJMBG.textProperty().addListener((obs, oldIme, newIme) -> {
-            if (!newIme.isEmpty() && EditController.DaLiJeBroj(newIme) && newIme.length() == 13) {
+            if (!newIme.isEmpty() && EditController.DaLiJeBroj(newIme) && newIme.length() == 13 && provjeraJMBG(newIme)) {
                 fldJMBG.getStyleClass().removeAll("poljeNijeIspravno");
                 fldJMBG.getStyleClass().add("poljeIspravno");
             } else {
@@ -144,15 +152,35 @@ public class EditEmployeeController {
 
     }
 
+    public boolean validacijaImena(String ime){        // Trazi broj u stringu
+        return Pattern.compile("[0-9]").matcher(ime).find();
+    }
+
     public boolean validacijaEmaila(String email){
         if(email.length() < 3) return false;
         String pattern = "[A-Za-z0-9]+@[A-Za-z]+.*";
         char c;
         int index = 0;
-
+        if(employee == null) {
+            for (Osobe o : emp) {
+                if (o.getEmail().equals(email)) return false;
+            }
+        }
+        else if(!(employee.getEmail().equals(email))){
+            for (Osobe o : emp) {
+                if (o.getEmail().equals(email)) return false;
+            }
+        }
         if(email.matches(pattern)) return true;
 
         return false;
+    }
+
+    public boolean provjeraJMBG(String JMBG){
+        for(Osobe o : emp){
+            if(o.getJMBG().equals(JMBG)) return false;
+        }
+        return true;
     }
 
     public boolean checkPassword(String pass){
@@ -186,9 +214,12 @@ public class EditEmployeeController {
     }
 
     public void actOk(ActionEvent actionEvent) {
+       // System.out.println(validacijaEmaila(fldEmail.getText()));
         if(!(fldFirstName.getText().isEmpty()) && fldFirstName.getText().length() > 2 && !(fldLastName.getText().isEmpty()) && fldLastName.getText().length() > 2 && ((fldPhone.getText().length() > 5 )) && (EditController.DaLiJeBroj(fldJMBG.getText())) && fldJMBG.getText().length() == 13
-        && validacijaEmaila(fldEmail.getText()) && checkPassword(fldPassword.getText()) && validno == true && fldLocation.getText().length() != 0) {
+        && validacijaEmaila(fldEmail.getText()) && checkPassword(fldPassword.getText()) && validno == true && fldLocation.getText().length() != 0 && !validacijaImena(fldFirstName.getText()) && !validacijaImena(fldLastName.getText()) && provjeraJMBG(fldJMBG.getText())) {
             if(employee == null) employee = new Osobe();
+            fldEmail.getStyleClass().removeAll("poljeNijeIspravno");
+            fldEmail.getStyleClass().add("poljeIspravno");
             employee.setIme(fldFirstName.getText());
             employee.setPrezime(fldLastName.getText());
             employee.setTelefon(fldPhone.getText());
