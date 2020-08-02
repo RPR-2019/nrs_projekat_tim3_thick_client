@@ -51,7 +51,7 @@ public class EditCategoryController {
         }
 
         fldNaziv.textProperty().addListener((obs, oldIme, newIme) -> {               // Kategorija koja se unosi mora biti jednaka nekoj iz baze
-            if (!newIme.isEmpty()) {
+            if (!newIme.isEmpty() && !provjeraKat(newIme)) {
                 fldNaziv.getStyleClass().removeAll("poljeNijeIspravno");
                 fldNaziv.getStyleClass().add("poljeIspravno");
             } else {
@@ -77,7 +77,7 @@ public class EditCategoryController {
     }
 
     public void actOk(ActionEvent actionEvent) {
-        if(fldNaziv.getText().length() !=0){
+        if(fldNaziv.getText().length() !=0 && !provjeraKat(fldNaziv.getText())){
             if(kategorija == null) kategorija = new Kategorija();
             kategorija.setNaziv(fldNaziv.getText());
             kategorija.setNadKategorija(choiceNadKat.getValue().toString());

@@ -8,13 +8,13 @@ public class Osobe {
     private int id;
   //  private Long JMBG;
     private String ime,prezime,telefon,naziv_lokacije,email,password,JMBG;
-    public enum Uloga {ADMIN,UPOSLENIK,KUPAC};
+    private Uloga uloga;
     private LocalDate datum_zaposljavanja;
 
     public Osobe() {
     }
 
-    public Osobe(int id, String ime, String prezime, String telefon,LocalDate datum_zaposljavanja,String JMBG, String naziv_lokacije) {
+    public Osobe(int id, String ime, String prezime, String telefon,LocalDate datum_zaposljavanja,String JMBG, String naziv_lokacije,Uloga uloga) {
         this.id = id;
         this.JMBG = JMBG;
         this.ime = ime;
@@ -22,39 +22,7 @@ public class Osobe {
         this.telefon = telefon;
         this.naziv_lokacije = naziv_lokacije;
         this.datum_zaposljavanja = datum_zaposljavanja;
-    }
-
-    public Osobe(String ime, String prezime, String telefon,LocalDate datum_zaposljavanja,String JMBG, String naziv_lokacije) {
-        this.id = id;
-        this.JMBG = JMBG;
-        this.ime = ime;
-        this.prezime = prezime;
-        this.telefon = telefon;
-        this.naziv_lokacije = naziv_lokacije;
-        this.datum_zaposljavanja = datum_zaposljavanja;
-    }
-
-    public Osobe(String ime, String prezime, String telefon,LocalDate datum_zaposljavanja,String JMBG, String naziv_lokacije,String password,String email) {
-        this.id = id;
-        this.JMBG = JMBG;
-        this.ime = ime;
-        this.prezime = prezime;
-        this.telefon = telefon;
-        this.naziv_lokacije = naziv_lokacije;
-        this.datum_zaposljavanja = datum_zaposljavanja;
-        this.email = email;
-        this.password = password;
-    }
-    public Osobe(int id,String ime, String prezime, String telefon,LocalDate datum_zaposljavanja,String JMBG, String naziv_lokacije,String password,String email) {
-        this.id = id;
-        this.JMBG = JMBG;
-        this.ime = ime;
-        this.prezime = prezime;
-        this.telefon = telefon;
-        this.naziv_lokacije = naziv_lokacije;
-        this.datum_zaposljavanja = datum_zaposljavanja;
-        this.email = email;
-        this.password = password;
+        this.uloga = uloga;
     }
 
     public int getId() {
@@ -127,5 +95,13 @@ public class Osobe {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Uloga getUloga() {
+        return uloga;
+    }
+
+    public void setUloga(Uloga uloga) {
+        this.uloga = uloga;
     }
 }

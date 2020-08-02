@@ -31,6 +31,7 @@ public class SkladisteDAO {
     private SimpleObjectProperty<Osobe> currentEmployee = null;
     private SimpleObjectProperty<Skladiste> currentWarehouse = null;
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
+    private boolean citanje = false;
 
     public static SkladisteDAO getInstance() {
         if (instance == null) instance = new SkladisteDAO();
@@ -360,6 +361,49 @@ public class SkladisteDAO {
             e.printStackTrace();
         }
     }
+
+    public int checkIfProductExists(Proizvod proizvod){
+        JSONArray proizvodi = new JSONArray(dajJson("https://nrs-backend.herokuapp.com/items"));
+        Proizvod p = new Proizvod();
+        int id = 0;
+        for(int i=0 ; i<proizvodi.length() ; i++){
+            if(proizvodi.getJSONObject(i).getString("naziv").equals(proizvod.getNaziv())){
+                id = proizvodi.getJSONObject(i).getInt("id");
+           //     System.out.println(proizvod.getNaziv());
+                return id;
+            }
+        }
+        return id;
+    }
+
+    public int checkIfProductExistsWarehouse(Skladiste warehouse,Proizvod proizvod){
+        JSONArray proizvodi = new JSONArray(dajJson("https://nrs-backend.herokuapp.com/warehouses/"+warehouse.getId()+"/items"));
+        Proizvod p = new Proizvod();
+        int id = 0;
+        for(int i=0 ; i<proizvodi.length() ; i++){
+            if(proizvodi.getJSONObject(i).getInt("proizvod_id") == proizvod.getId()){
+                id = proizvodi.getJSONObject(i).getInt("proizvod_id");
+                return id;
+            }
+        }
+        return id;
+    }
+
+    public int checkIfProductExistsSuppliers(Dobavljac dobavljac,Proizvod proizvod){
+        JSONArray proizvodi = new JSONArray(dajJson("https://nrs-backend.herokuapp.com/suppliers/"+dobavljac.getId()+"/items"));
+        Proizvod p = new Proizvod();
+        int id = 0;
+        for(int i=0 ; i<proizvodi.length() ; i++){
+            if(proizvodi.getJSONObject(i).getInt("proizvod_id") == proizvod.getId()){
+                id = proizvodi.getJSONObject(i).getInt("proizvod_id");
+                citanje = true;
+                return id;
+            }
+        }
+        citanje = false;
+        return id;
+    }
+
     public void addProduct(Proizvod proizvod,Skladiste skladiste,Dobavljac dobavljac) {
         URL url = null;
         try {
@@ -371,33 +415,46 @@ public class SkladisteDAO {
         String json = "{ \"naziv\": \""+proizvod.getNaziv()+"\"," +
                 "\"proizvodjac\":  \""+proizvod.getProizvodjac().getId()+"\",\"kategorija\":  \""+proizvod.getKategorija().getId()+"\",\"cijena\":  \""+proizvod.getCijena()+"\"}";
 
-
+        int provjera1 = checkIfProductExists(proizvod);
+        if(provjera1 ==0)
         addUsingHttp(json,url);
+        else proizvod.setId(provjera1);
 
+      //  System.out.println(proizvod.getNaziv());
+        if(provjera1 == 0) {
             JSONArray jsonArray = new JSONArray(dajJson("https://nrs-backend.herokuapp.com/items"));
-            JSONObject jo = jsonArray.getJSONObject(jsonArray.length()-1);
+            JSONObject jo = jsonArray.getJSONObject(jsonArray.length() - 1);
             int id = jo.getInt("id");
             proizvod.setId(id);
-
+        }
          url = null;
         try {
-            url = new URL("https://nrs-backend.herokuapp.com/warehouses/" + skladiste.getId() + "/items/"+proizvod.getId());
+            if(provjera1 != 0)
+            url = new URL("https://nrs-backend.herokuapp.com/warehouses/" + skladiste.getId() + "/items/"+provjera1);
+            else url = new URL("https://nrs-backend.herokuapp.com/warehouses/" + skladiste.getId() + "/items/"+proizvod.getId());
+
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
         json = "{ \"quantity\":  \""+proizvod.getKolicina()+"\"}";
 
+        int provjera2 = checkIfProductExistsWarehouse(skladiste,proizvod);
+        if(provjera2 == 0)
         addUsingHttp(json,url);
-
 
         url = null;
         try {
-            url = new URL("https://nrs-backend.herokuapp.com/suppliers/" + dobavljac.getId() + "/items/"+proizvod.getId());
+            if(provjera2 != 0)
+            url = new URL("https://nrs-backend.herokuapp.com/suppliers/" + dobavljac.getId() + "/items/"+provjera2);
+            else url = new URL("https://nrs-backend.herokuapp.com/suppliers/" + dobavljac.getId() + "/items/"+proizvod.getId());
+
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
         json = "{ \"dobavljac_id\":  \""+dobavljac.getId()+"\"}";
 
+        int provjera3 = checkIfProductExistsSuppliers(dobavljac,proizvod);
+        if(provjera3 == 0)
         addUsingHttp(json,url);
     }
 
@@ -449,29 +506,11 @@ public class SkladisteDAO {
 
     public void deleteProduct(Proizvod product,Skladiste sk) {
         URL url = null;
-        HttpURLConnection con = null;
-        try {
-            url = new URL("https://nrs-backend.herokuapp.com/suppliers/" + product.getDobavljac().getId()+"/items/"+product.getId());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        deleteUsingHttp(url);
-
-         url = null;
         try {
             url = new URL("https://nrs-backend.herokuapp.com/warehouses/" + sk.getId()+"/items/"+product.getId());
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        deleteUsingHttp(url);
-
-        url = null;
-        try {
-            url = new URL("https://nrs-backend.herokuapp.com/items/" + product.getId());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
         deleteUsingHttp(url);
     }
 
@@ -485,7 +524,6 @@ public class SkladisteDAO {
 
         String json = "{ \"naziv\": \"" + proizvod.getNaziv() + "\"," +
                 "\"proizvodjac\":  \"" + proizvod.getProizvodjac().getId() + "\",\"kategorija\":  \"" + proizvod.getKategorija().getId() + "\",\"cijena\":  \"" + proizvod.getCijena() + "\"}";
-
 
         updateUsingHttp(json,url);
 
@@ -510,6 +548,7 @@ public class SkladisteDAO {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+        if(citanje == true)
         deleteUsingHttp(url);
 
         url = null;
@@ -521,7 +560,7 @@ public class SkladisteDAO {
         }
 
         json = "{ \"dobavljac_id\":  \""+dobavljac.getId()+"\"}";
-
+        if(citanje == true)
         addUsingHttp(json,url);
 
     }
@@ -625,9 +664,9 @@ public class SkladisteDAO {
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
-
+        System.out.println(employee.getIme());
             String json = "{ \"ime\": \""+employee.getIme()+"\"," +
-                    "\"prezime\":  \""+employee.getPrezime()+"\",\"telefon\":  \""+employee.getTelefon()+"\",\"datum_zaposljavanja\":  \""+employee.getDatum_zaposljavanja()+"\",\"lokacija\":  \""+employee.getNaziv_lokacije()+"\"}";
+                    "\"prezime\":  \""+employee.getPrezime()+"\",\"telefon\":  \""+employee.getTelefon()+"\",\"datum_zaposljavanja\":  \""+employee.getDatum_zaposljavanja()+"\",\"jmbg\":  \""+employee.getJMBG()+"\",\"lokacija\":  \""+employee.getNaziv_lokacije()+"\"}";
 
             currentEmployee.set(employee);
 
@@ -786,7 +825,7 @@ public class SkladisteDAO {
             }
             if(dobavljac.getNaziv() != null) break;
         }
-        System.out.println(dobavljac.getId());
+     //   System.out.println(dobavljac.getId());
         return dobavljac;
     }
 
@@ -794,7 +833,7 @@ public class SkladisteDAO {
         JSONObject jo = new JSONObject(dajJson("https://nrs-backend.herokuapp.com/people/"+id));
         String datum_zaposljavanja = jo.getString("datum_zaposljavanja");
         LocalDate date = LocalDate.parse(datum_zaposljavanja,formatter);
-        Osobe o = new Osobe(jo.getInt("id"),jo.getString("Ime"),jo.getString("Prezime"),jo.getString("Telefon"),date,jo.getString("JMBG"),jo.getString("naziv_lokacije"));
+        Osobe o = new Osobe(jo.getInt("id"),jo.getString("Ime"),jo.getString("Prezime"),jo.getString("Telefon"),date,jo.getString("JMBG"),jo.getString("naziv_lokacije"),Uloga.Uposlenik);
 
         return o;
     }

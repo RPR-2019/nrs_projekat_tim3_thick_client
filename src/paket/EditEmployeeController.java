@@ -186,7 +186,7 @@ public class EditEmployeeController {
     }
 
     public void actOk(ActionEvent actionEvent) {
-        if(!(fldFirstName.getText().isEmpty()) && fldFirstName.getText().length() > 2 && !(fldLastName.getText().isEmpty()) && fldLastName.getText().length() > 2 && ((fldPhone.getText().length() > 5 && EditController.DaLiJeBroj(fldPhone.getText()))) && (EditController.DaLiJeBroj(fldJMBG.getText())) && fldJMBG.getText().length() == 13
+        if(!(fldFirstName.getText().isEmpty()) && fldFirstName.getText().length() > 2 && !(fldLastName.getText().isEmpty()) && fldLastName.getText().length() > 2 && ((fldPhone.getText().length() > 5 )) && (EditController.DaLiJeBroj(fldJMBG.getText())) && fldJMBG.getText().length() == 13
         && validacijaEmaila(fldEmail.getText()) && checkPassword(fldPassword.getText()) && validno == true && fldLocation.getText().length() != 0) {
             if(employee == null) employee = new Osobe();
             employee.setIme(fldFirstName.getText());

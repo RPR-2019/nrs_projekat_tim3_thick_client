@@ -1,7 +1,15 @@
 package paket;
 
-public class Administrator {
+import java.time.LocalDate;
+
+public class Administrator extends Osobe {
     private String email,password;
+
+    public Administrator(int id, String ime, String prezime, String telefon, LocalDate datum_zaposljavanja, String JMBG, String naziv_lokacije, Uloga uloga, String email, String password) {
+        super(id, ime, prezime, telefon, datum_zaposljavanja, JMBG, naziv_lokacije, uloga);
+        this.email = email;
+        this.password = password;
+    }
 
     public Administrator() {
     }
