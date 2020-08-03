@@ -30,6 +30,7 @@ public class EditController {
     private ObservableList<Kategorija> obskategorije = FXCollections.observableArrayList();
     private boolean Cancel = false;
     ArrayList<Proizvod> products = new ArrayList<>();
+    private Dobavljac dobavljac;
 
 
     public static boolean DaLiJeBroj(String str){
@@ -142,6 +143,7 @@ public class EditController {
             fldNaziv.getStyleClass().add("poljeIspravno");
             fldCijena.getStyleClass().add("poljeIspravno");
             fldKolicina.getStyleClass().add("poljeIspravno");
+            dobavljac = product.getDobavljac();
 
         }
 
@@ -211,8 +213,8 @@ public class EditController {
         stage.close();
     }
 
-    public int getKolicina(){
-        return kolicina;
+    public Dobavljac getDobavljac() {
+        return dobavljac;
     }
 
 }

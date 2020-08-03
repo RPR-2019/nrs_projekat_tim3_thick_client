@@ -465,7 +465,8 @@ public class MainController {
                 //     int kolicina = editController.getKolicina();
                 //     p.setKolicina(kolicina);
                 //     model.updateCurrentProductWarehouse(p,sk.getId(),kolicina);
-                model.updateCurrentProduct(p,sk,p.getDobavljac());
+                Dobavljac dob = editController.getDobavljac();
+                model.updateCurrentProduct(p,sk,p.getDobavljac(),dob);
                 obsProizvodi.clear();
                 ArrayList<Proizvod> ps = model.getProizvodiSkladista(sk);
                 ObservableList<Proizvod> pr = FXCollections.observableArrayList();

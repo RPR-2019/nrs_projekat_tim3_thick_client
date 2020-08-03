@@ -552,7 +552,7 @@ public class SkladisteDAO {
 
     }
 
-    public void updateCurrentProduct(Proizvod proizvod,Skladiste sk,Dobavljac dobavljac) {
+    public void updateCurrentProduct(Proizvod proizvod,Skladiste sk,Dobavljac dobavljac,Dobavljac dob) {
         URL url = null;
         try {
             url = new URL("https://nrs-backend.herokuapp.com/items/" + proizvod.getId());
@@ -586,9 +586,12 @@ public class SkladisteDAO {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        if(citanje == true)
+        int id = checkIfProductExistsSuppliers(findDobavljac(proizvod.getId()),proizvod);
+      //  if(citanje == true)
+        if(dob.getId() != dobavljac.getId() && citanje == true)   // Provjerava dobavljac prime promjene i poslije. Ako su razliciti onda brisi
         deleteUsingHttp(url);
 
+      //  System.out.println(dob.getId() + " " + dobavljac.getId());
         url = null;
 
         try {
@@ -598,8 +601,9 @@ public class SkladisteDAO {
         }
 
         json = "{ \"dobavljac_id\":  \""+dobavljac.getId()+"\"}";
-        if(citanje == true)
-        addUsingHttp(json,url);
+     //   if(citanje == true)
+        if(dob.getId() != dobavljac.getId() && citanje == true)
+            addUsingHttp(json,url);
 
     }
 
